@@ -7,5 +7,10 @@
     /// </summary>
     public class AmbiguousViewsException : Exception
     {
+    	public AmbiguousViewsException() {
+    	}
+
+    	public AmbiguousViewsException(string message) : base(message) {
+    	}
     }
 }

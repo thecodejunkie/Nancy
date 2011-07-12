@@ -34,9 +34,10 @@
 
             viewsThatMatchesCritera = GetViewsThatMatchesViewExtension(viewName, viewsThatMatchesCritera);
 
-            if (viewsThatMatchesCritera.Count() > 1)
+        	int count = viewsThatMatchesCritera.Count();
+        	if (count > 1)
             {
-                throw new AmbiguousViewsException();
+					throw new AmbiguousViewsException(string.Format("This exception was thrown because multiple views were found. {0} view(s): {1}", count, string.Join(", ", viewsThatMatchesCritera.Select(x => x.Location).ToArray())));
             }
 
             return viewsThatMatchesCritera.FirstOrDefault();
