@@ -26,16 +26,59 @@
      * 
      * 
      */
-    
+
+    public class Client
+    {
+        public string ClientId { get; set; }
+        public string Description { get; set; }
+        public string Name { get; set; }
+    }
+
+    public interface IClientPool
+    {
+        Client GetClient(string clientId);
+    }
+
+    public class DefaultClientPool : IClientPool
+    {
+        private readonly List<Client> clients;
+
+        public DefaultClientPool()
+        {
+            this.clients = new List<Client>
+            {
+                new Client { ClientId = "NancyApp", Description = "This is a Nancy application", Name = "NancyApp" },
+                new Client { ClientId = "Facebook", Description = "Facebiijm the social media site", Name = "Facebook" }
+            };
+        }
+
+        public Client GetClient(string clientId)
+        {
+            return this.clients.Where(x => x.ClientId.Equals(clientId, StringComparison.OrdinalIgnoreCase)).SingleOrDefault();
+        }
+    }
+
+    public class Authorization
+    {
+        public string Client_Id { get; set; }
+        public string Redirect_Uri { get; set; }
+    }
+
     public class OAuthModule : NancyModule
     {
-        public OAuthModule() : base(OAuth.Configuration.Base)
+        public OAuthModule(IClientPool clientPool) : base(OAuth.Configuration.Base)
         {
+            this.RequiresAuthentication();
+
             Get[OAuth.Configuration.Authorization] = parameters => {
 
-                Foo f = this.Bind();
+                var auth = 
+                    this.Bind<Authorization>();
 
-                return "This is where you'd authorize";
+                var client =
+                    clientPool.GetClient(auth.Client_Id);
+
+                return string.Concat(client.Name, " (", client.Description, ") is requesting permission to access your account");
             };
         }
     }
@@ -63,32 +106,7 @@
         string Secret { get; set; }
     }
 
-    public class Foo
-    {
-        public string ClientId { get; set; }
-    }
 
-public static class ResponseExtensions
-{
-    public static Response WithHeaders(this IResponseFormatter formatter, IDictionary<string, string> headers)
-    {
-        return new Response { Headers = headers };
-    }
-}
-
-public class TestModule : NancyModule
-{
-    public TestModule()
-    {
-        Get["/"] = parameters => {
-            return Response.WithHeaders(new Dictionary<string, string>()
-            {
-                { "Content-Type", "application/json"},
-                { "Cache", "no-cache"}
-            });
-        };
-    }
-}
 
     public interface IAuthorizationRequest
     {
