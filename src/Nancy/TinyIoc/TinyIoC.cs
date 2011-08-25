@@ -3114,11 +3114,11 @@ namespace TinyIoC
 
                 try
                 {
-                    args[parameterIndex] = parameters.ContainsKey(currentParam.Name) ? 
-                                            parameters[currentParam.Name] : 
+                    args[parameterIndex] = parameters.ContainsKey(currentParam.Name) ?
+                                            parameters[currentParam.Name] :
                                             ResolveInternal(
-                                                new TypeRegistration(currentParam.ParameterType), 
-                                                NamedParameterOverloads.Default, 
+                                                new TypeRegistration(currentParam.ParameterType),
+                                                NamedParameterOverloads.Default,
                                                 options);
                 }
                 catch (TinyIoCResolutionException ex)

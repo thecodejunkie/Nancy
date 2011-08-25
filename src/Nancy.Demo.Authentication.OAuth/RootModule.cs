@@ -1,17 +1,22 @@
-namespace Nancy.Demo.Authentication.Forms
+﻿namespace Nancy.Demo.Authentication.OAuth
 {
     using System;
     using System.Dynamic;
-    using Nancy;
+    using Extensions;
     using Nancy.Authentication.Forms;
-    using Nancy.Extensions;
 
-    public class MainModule : NancyModule
+    public class RootModule : NancyModule
     {
-        public MainModule()
+        public RootModule()
         {
-            Get["/"] = x => {
-                return View["index"];
+            Get["/"] = parameters =>
+            {
+                return "<a href='" + Context.ToFullPath("~/oauth/authorize?Client_Id=NancyApp&Redirect_Uri=http%3A%2F%2Fwww.google.com&state=ApplicationStateValue") + "'>Authorize</a>";
+            };
+
+            Get["/logout"] = x =>
+            {
+                return this.LogoutAndRedirect("~/");
             };
 
             Get["/login"] = x =>
@@ -22,7 +27,8 @@ namespace Nancy.Demo.Authentication.Forms
                 return View["login", model];
             };
 
-            Post["/login"] = x => {
+            Post["/login"] = x =>
+            {
                 var userGuid = UserDatabase.ValidateUser((string)this.Request.Form.Username, (string)this.Request.Form.Password);
 
                 if (userGuid == null)
@@ -37,10 +43,6 @@ namespace Nancy.Demo.Authentication.Forms
                 }
 
                 return this.LoginAndRedirect(userGuid.Value, expiry);
-            };
-
-            Get["/logout"] = x => {
-                return this.LogoutAndRedirect("~/");
             };
         }
     }

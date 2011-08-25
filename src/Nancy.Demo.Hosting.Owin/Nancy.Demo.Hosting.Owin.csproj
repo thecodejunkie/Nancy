@@ -160,7 +160,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>5827</DevelopmentServerPort>
+          <DevelopmentServerPort>60681</DevelopmentServerPort>
           <DevelopmentServerVPath>/owin/</DevelopmentServerVPath>
           <IISUrl>http://localhost:5827/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

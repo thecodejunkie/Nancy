@@ -155,7 +155,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>2146</DevelopmentServerPort>
+          <DevelopmentServerPort>60654</DevelopmentServerPort>
           <DevelopmentServerVPath>/forms</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

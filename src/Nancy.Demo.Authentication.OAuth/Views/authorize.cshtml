@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <strong>@Model.Name</strong> is requesting permission to do the following:
+
+    <div>
+        <h2>@Model.Name</h2>
+        @Model.Description
+    </div>
+
+    <form method="POST" action="/oauth/allow">
+        <input type="submit" value="Allow" />
+    </form>
+
+    <form method="POST" action="/oauth/deny">
+        <input type="submit" value="Don't Allow" />
+    </form>
+</body>
+</html>
