@@ -12,7 +12,9 @@ namespace Nancy.Authentication.OAuth
             IAuthorizationCodeGenerator authorizationCodeGenerator,
             IAuthorizationCodeRepository authorizationCodeRepository) : base(OAuth.Configuration.Base)
         {
-            this.RequiresAuthentication();
+            // This should probably be wrapped in a condition that is managed by the OAuthConfiguration,
+            // because not everybody may want to protect it behind authentication? I think... =)
+            //this.RequiresAuthentication();
 
             Get[OAuth.Configuration.AuthorizationRequestRoute] = parameters =>
             {
