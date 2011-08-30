@@ -4,6 +4,7 @@
     using System.Dynamic;
     using Extensions;
     using Helpers;
+    using ModelBinding;
     using Nancy.Authentication.Forms;
     using Nancy.Authentication.OAuth;
 
@@ -17,7 +18,7 @@
                     HttpUtility.UrlEncode(Context.ToFullPath("~/authreturn"));
 
                 var path =
-                    "~/oauth/authorize?Client_Id=NancyApp&Redirect_Uri=" + returnUrl + "&state=ApplicationStateValue";
+                    "~/oauth/authorize?Client_Id=NancyApp&&Response_Type=code&Redirect_Uri=" + returnUrl + "&state=ApplicationStateValue";
 
                 return "<a href='" + Context.ToFullPath(path) + "'>Authorize</a>";
             };
@@ -52,6 +53,11 @@
 
             Get["/authreturn"] = parameters => {
 
+                if (Request.Query.error.HasValue)
+                {
+                    return string.Concat(Request.Query.error, " - ", Request.Query["error_description"]);
+                }
+
                 var targetUrl = string.Concat(
                     Context.ToFullPath("~" + OAuth.Configuration.Base + OAuth.Configuration.AuthenticationRoute),
                     "?code=",
@@ -67,8 +73,10 @@
                 return Response.AsRedirect(targetUrl);
             };
 
-            Get["/oauthtokenresponse"] = parameters => {
-                return "Returned with oauth_token " + Request.Query["oauth_token"];
+            Get["/oauthtokenresponse"] = parameters =>{
+                var token = this.Bind<AccessToken>();
+
+                return "Returned with oauth_token " + token.Access_Token;
             };
         }
     }

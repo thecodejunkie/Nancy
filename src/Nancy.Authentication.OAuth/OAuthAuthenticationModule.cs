@@ -1,6 +1,7 @@
 ﻿namespace Nancy.Authentication.OAuth
 {
     using System;
+    using System.Collections.Generic;
     using ModelBinding;
 
     public class OAuthAuthenticationModule : NancyModule
@@ -10,44 +11,69 @@
             IAccessTokenGenerator accessTokenGenerator,
             IAccessTokenPersister accessTokenPersister) : base(OAuth.Configuration.Base)
         {
-            //this.RequiresAuthentication();
+            this.Before = OAuth.Configuration.PreRequest;
 
+            // Should this be a POST? Section 3.2 of the specification indicates it should
             Get[OAuth.Configuration.AuthenticationRoute] = parameters =>
             {
                 var authentication =
                     this.Bind<Authentication>();
 
-                var isAuthenticated = 
-                    authenticationProvider.Authenticate(authentication);
-
-                // Should handle invalid authentication
-
-                var oauth_token =
-                    accessTokenGenerator.Generate();
+                if (!authentication.IsValid())
+                {
+                    // TODO: Handle invalid query
+                }
 
                 var cookie =
                     OAuth.DecryptAndValidateCookie<Authorization>(Request, OAuth.Configuration);
 
-                accessTokenPersister.Persist(oauth_token, cookie.State);
+                if (!string.IsNullOrEmpty(cookie.Redirect_Uri))
+                {
+                    if (!cookie.Redirect_Uri.Equals(authentication.Redirect_Uri, StringComparison.OrdinalIgnoreCase))
+                    {
+                        // This is an error
+                    }
+                }
 
-                var target =
-                    string.Concat(authentication.Redirect_Uri, "?oauth_token=", oauth_token);
+                var isAuthenticated = 
+                    authenticationProvider.Authenticate(authentication);
 
-                return Response.AsRedirect(target);
+                if (!isAuthenticated)
+                {
+                    // TODO: Handle invalid authentication, is Unauthorized correct response?!
+                    return HttpStatusCode.Unauthorized;
+                }
+
+                var token =
+                    accessTokenGenerator.Generate();
+
+                accessTokenPersister.Persist(cookie.Client_Id, token, cookie.Scope);
+
+                // Should JSON serialize this into the response body
+                var responseToken = new AccessToken
+                {
+                    Access_Token = token.Access_Token,
+                    State = cookie.State ?? string.Empty
+                };
+
+                return Response
+                    .AsStatusCode(HttpStatusCode.OK)
+                    .WithJsonBody((object) responseToken.AsExpandoObject())
+                    .WithNoCache();
             };
         }
     }
 
-    public interface IAccessTokenPersister
+    public class AccessToken
     {
-        void Persist(string accessToken, string scope);
-    }
+        public string Access_Token { get; set; }
+        
+        public string Token_type { get; set; }
+        
+        public int Expires_In { get; set; } // Make nullable and update AsExpandoObject to exclude them
+        
+        public string Refresh_Token { get; set; }
 
-    public class DefaultAccessTokenPersister : IAccessTokenPersister
-    {
-        public void Persist(string accessToken, string scope)
-        {
-            var i = 10;
-        }
+        public string State { get; set; }
     }
 }

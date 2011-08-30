@@ -1,6 +1,4 @@
-﻿using Nancy.Cryptography;
-
-namespace Nancy.Authentication.OAuth
+﻿namespace Nancy.Authentication.OAuth
 {
     using System;
     using System.Collections.Generic;
@@ -10,6 +8,7 @@ namespace Nancy.Authentication.OAuth
     using System.Xml.Serialization;
     using Nancy.Cookies;
     using Nancy.Bootstrapper;
+    using Nancy.Cryptography;
     using Nancy.Security;
 
 
@@ -30,31 +29,30 @@ namespace Nancy.Authentication.OAuth
      * 
      * 
      */
-    
-    public class Authorization
-    {
-        public string Client_Id { get; set; }
-        public string Redirect_Uri { get; set; }
-        public string Scope { get; set; }
-        public string State { get; set; }
-    }
-
-    public class Authentication
-    {
-        public string Client_Id { get; set; }
-        public string Client_Secret { get; set; }
-        public string Code { get; set; }
-        public string Redirect_Uri { get; set; }
-    }
 
     public static class OAuth
     {
+        private const string OAuthAuthorizationCookieName = "_ncoa";
+
         /// <summary>
         /// The configuration used by the OAuth provider.
         /// </summary>
         public static OAuthConfiguration Configuration { get; private set; }
 
-        private const string OAuthAuthorizationCookieName = "_ncoa";
+        public static void Enable(IApplicationPipelines applicationPipelines)
+        {
+            Enable(applicationPipelines, new OAuthConfiguration());
+        }
+
+        public static void Enable(IApplicationPipelines applicationPipelines, Action<OAuthConfiguration> closure)
+        {
+            var configuration =
+                new OAuthConfiguration();
+
+            closure.Invoke(configuration);
+
+            Enable(applicationPipelines, configuration);
+        }
 
         /// <summary>
         /// 

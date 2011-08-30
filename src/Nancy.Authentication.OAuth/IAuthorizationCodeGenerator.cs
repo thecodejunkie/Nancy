@@ -7,11 +7,11 @@
         string Generate();
     }
 
-    public class AuthorizationCodeGenerator : IAuthorizationCodeGenerator
+    public class DefaultAuthorizationCodeGenerator : IAuthorizationCodeGenerator
     {
         public string Generate()
         {
-            return Guid.NewGuid().ToString("N");
+            return "Code" + Guid.NewGuid().ToString("N");
         }
     }
 }

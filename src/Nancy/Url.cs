@@ -71,5 +71,19 @@ namespace Nancy
         /// Gets the fragment of the request
         /// </summary>
         public string Fragment { get; set; }
+
+        public static implicit operator string(Url url)
+        {
+            return url.ToString();
+        }
+
+        public override string ToString()
+        {
+            return string.Concat(
+                this.Scheme,
+                "://",
+                this.HostName,
+                "/");
+        }
     }
 }

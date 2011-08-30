@@ -1,6 +1,7 @@
 namespace Nancy.Authentication.OAuth
 {
     using System;
+    using Nancy;
     using Nancy.ModelBinding;
     using Security;
 
@@ -12,14 +13,29 @@ namespace Nancy.Authentication.OAuth
             IAuthorizationCodeGenerator authorizationCodeGenerator,
             IAuthorizationCodeRepository authorizationCodeRepository) : base(OAuth.Configuration.Base)
         {
-            // This should probably be wrapped in a condition that is managed by the OAuthConfiguration,
-            // because not everybody may want to protect it behind authentication? I think... =)
-            //this.RequiresAuthentication();
+            //this.Before = OAuth.Configuration.PreRequest;
 
             Get[OAuth.Configuration.AuthorizationRequestRoute] = parameters =>
             {
                 var authorization =
                     this.Bind<Authorization>();
+
+                if (!authorization.IsValid())
+                {
+                    //if (string.IsNullOrEmpty(authorization.Redirect_Uri))
+                    //{
+                    //    return HttpStatusCode.BadRequest;
+                    //}
+
+                    var error = new AuthorizationErrorResponse
+                    {
+                        Error = "invalid_request",
+                        Error_Description = "The request is missing a required parameter, includes an unsupported parameter or parameter value, or is otherwise malformed.",
+                        State = authorization.State
+                    };
+
+                    return Response.AsErrorResponse(error, authorization.Redirect_Uri);
+                }
 
                 // Get stored information about the application that is trying to authorize
                 // not 100% sure here as the information that is stored about the app could
@@ -27,21 +43,28 @@ namespace Nancy.Authentication.OAuth
                 // then let you bring in more impl specific info for the view model ?!
                 var application =
                     applicationRepository.GetApplication(authorization.Client_Id);
+                
+                if (application == null)
+                {
+                    var error = new AuthorizationErrorResponse
+                    {
+                        Error = "unauthorized_client",
+                        Error_Description = "The client is not authorized to request an authorization code using this method.",
+                        State = authorization.State
+                    };
 
-                // TODO: Should handle invalid client_id, i.e when no application matched the id
+                    return Response.AsErrorResponse(error, authorization.Redirect_Uri);
+                }
 
-                // The idea here is that based on the retrieved application info, you should be
-                // able to create a viewModel for the stuff that should be shown on the page where
-                // the user gets to allow/deny access.
-                var model =
-                    authorizationViewModelFactory.CreateViewModel(authorization, application);
+                var model = 
+                    new { Application = application, Authorization = authorization };
 
-                // Render the view with the viewModel that's been created
+                var viewModel =
+                    authorizationViewModelFactory.CreateViewModel(model.AsExpandoObject());
+
                 var response =
-                    (Response)View[OAuth.Configuration.AuthorizationView, model];
+                    (Response)View[OAuth.Configuration.AuthorizationView, viewModel];
 
-                // Store the authorization info in a cookie because it's needed in the routes
-                // that handels when the user Allows or Denies access
                 OAuth.StoreAuthorization(response, authorization);
 
                 return response;
@@ -49,26 +72,16 @@ namespace Nancy.Authentication.OAuth
 
             Post[OAuth.Configuration.AuthorizationAllowRoute] = parameters =>
             {
-                // Generate the authorization code that the application will have to send back
-                // in to get the oauth_token later on
-                var code =
+                var authorizationCode =
                     authorizationCodeGenerator.Generate();
 
                 var authorization =
                     OAuth.DecryptAndValidateCookie<Authorization>(this.Request, OAuth.Configuration);
 
-                // Should store the actual client_id as key
-                authorizationCodeRepository.Store(string.Empty, code);
+                authorizationCodeRepository.Store(authorization.Client_Id, authorizationCode);
 
-                // Should redirect to Authorization.Redirect_Uri
-                // and pass along the generated code and Authorization.State
-
-                // Shouldn't the code be stored, with the scope so that the scope
-                // can be persisted with the oauth_token later on. The application
-                // needs to know what permission set a token has been granted.
-
-                var targetUrl = 
-                    string.Concat(authorization.Redirect_Uri,"?code=", code);
+                var targetUrl =
+                    string.Concat(authorization.Redirect_Uri, "?code=", authorizationCode);
 
                 if (!string.IsNullOrEmpty(authorization.State))
                 {
@@ -83,11 +96,14 @@ namespace Nancy.Authentication.OAuth
                 var authorization =
                     OAuth.DecryptAndValidateCookie<Authorization>(this.Request, OAuth.Configuration);
 
-                // Provide a better error ;)
-                var targetUrl =
-                    string.Concat(authorization.Redirect_Uri, "?error=CantTouchThis");
+                var error = new AuthorizationErrorResponse
+                {
+                    Error = "access_denied",
+                    Error_Description = "The user denied your request",
+                    State = authorization.State
+                };
 
-                return Response.AsRedirect(targetUrl);
+                return Response.AsErrorResponse(error, authorization.Redirect_Uri);
             };
 
         }
