@@ -4,14 +4,14 @@
 
     public interface IAccessTokenGenerator
     {
-        AccessToken Generate();
+        AccessTokenResponse Generate();
     }
 
     public class DefaultAccessTokenGenerator : IAccessTokenGenerator
     {
-        public AccessToken Generate()
+        public AccessTokenResponse Generate()
         {
-            return new AccessToken
+            return new AccessTokenResponse
             {
                 Access_Token = "Token" + Guid.NewGuid().ToString("N")
             };

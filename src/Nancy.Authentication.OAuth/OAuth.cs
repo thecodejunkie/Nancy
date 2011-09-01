@@ -64,10 +64,10 @@
             Configuration = configuration;
         }
 
-        public static void StoreAuthorization(Response response, Authorization authorization)
+        public static void StoreAuthorization(Response response, AuthorizationRequest authorizationRequest)
         {
             var authorizationCookie =
-                BuildCookie(authorization, Configuration);
+                BuildCookie(authorizationRequest, Configuration);
 
             response.AddCookie(authorizationCookie);
         }

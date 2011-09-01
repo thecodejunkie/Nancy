@@ -4,14 +4,14 @@
 
     public interface IAuthenticationProvider
     {
-        bool Authenticate(Authentication authentication);
+        bool Authenticate(AccessTokenRequest accessTokenRequest);
     }
 
     public class AuthenticationProvider : IAuthenticationProvider
     {
-        public bool Authenticate(Authentication authentication)
+        public bool Authenticate(AccessTokenRequest accessTokenRequest)
         {
-            return authentication.Client_Id.Equals("NancyApp");
+            return accessTokenRequest.Client_Id.Equals("NancyApp");
         }
     }
 }

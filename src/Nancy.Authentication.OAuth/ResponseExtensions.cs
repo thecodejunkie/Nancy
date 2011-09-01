@@ -1,3 +1,5 @@
+using System;
+
 namespace Nancy.Authentication.OAuth
 {
     using System.Collections.Generic;
@@ -20,12 +22,25 @@ namespace Nancy.Authentication.OAuth
 
     public static class ModelExtensions
     {
-        public static dynamic AsExpandoObject(this object source)
+        private static bool IgnoreNullableWithValue(PropertyInfo info, object source)
+        {
+            return !(Nullable.GetUnderlyingType(info.PropertyType) != null) && (info.GetValue(source, null) != null);
+        }
+
+        public static dynamic AsExpandoObject(this object source, bool ignorePropertiesWithDefaultValue = true)
         {
             var properties = source
                 .GetType()
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.GetValue(source, null) != null);
+                .AsEnumerable();
+
+            if (ignorePropertiesWithDefaultValue)
+            {
+                properties = properties
+                    .Where(x => IgnoreNullableWithValue(x, source))
+                    .Where(x => x.GetValue(source, null) != null);
+            }
+                
 
             var expando = new ExpandoObject();
             var expandoDictionary = (IDictionary<string, object>)expando;

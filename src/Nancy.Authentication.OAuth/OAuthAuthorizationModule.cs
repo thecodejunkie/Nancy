@@ -3,7 +3,6 @@ namespace Nancy.Authentication.OAuth
     using System;
     using Nancy;
     using Nancy.ModelBinding;
-    using Security;
 
     public class OAuthAuthorizationModule : NancyModule
     {
@@ -18,15 +17,10 @@ namespace Nancy.Authentication.OAuth
             Get[OAuth.Configuration.AuthorizationRequestRoute] = parameters =>
             {
                 var authorization =
-                    this.Bind<Authorization>();
+                    this.Bind<AuthorizationRequest>();
 
                 if (!authorization.IsValid())
                 {
-                    //if (string.IsNullOrEmpty(authorization.Redirect_Uri))
-                    //{
-                    //    return HttpStatusCode.BadRequest;
-                    //}
-
                     var error = new AuthorizationErrorResponse
                     {
                         Error = "invalid_request",
@@ -37,10 +31,6 @@ namespace Nancy.Authentication.OAuth
                     return Response.AsErrorResponse(error, authorization.Redirect_Uri);
                 }
 
-                // Get stored information about the application that is trying to authorize
-                // not 100% sure here as the information that is stored about the app could
-                // be impl specific.. but maybe this should just store the essentials and
-                // then let you bring in more impl specific info for the view model ?!
                 var application =
                     applicationRepository.GetApplication(authorization.Client_Id);
                 
@@ -75,35 +65,36 @@ namespace Nancy.Authentication.OAuth
                 var authorizationCode =
                     authorizationCodeGenerator.Generate();
 
-                var authorization =
-                    OAuth.DecryptAndValidateCookie<Authorization>(this.Request, OAuth.Configuration);
+                var authorizationRequest =
+                    OAuth.DecryptAndValidateCookie<AuthorizationRequest>(this.Request, OAuth.Configuration);
 
-                authorizationCodeRepository.Store(authorization.Client_Id, authorizationCode);
+                authorizationCodeRepository.Store(authorizationRequest, authorizationCode);
 
-                var targetUrl =
-                    string.Concat(authorization.Redirect_Uri, "?code=", authorizationCode);
+                var response = 
+                    new AuthorizationResponse
+                    {
+                        Code = authorizationCode,
+                        State = authorizationRequest.State
+                    };
 
-                if (!string.IsNullOrEmpty(authorization.State))
-                {
-                    targetUrl = string.Concat(targetUrl, "&state=", authorization.State);
-                }
-
-                return Response.AsRedirect(targetUrl);
+                return Response.AsRedirect(
+                    string.Concat(authorizationRequest.Redirect_Uri,
+                    response.AsQueryString()));
             };
 
             Post[OAuth.Configuration.AuthorizationDenyRoute] = parameters =>
             {
-                var authorization =
-                    OAuth.DecryptAndValidateCookie<Authorization>(this.Request, OAuth.Configuration);
+                var authorizationRequest =
+                    OAuth.DecryptAndValidateCookie<AuthorizationRequest>(this.Request, OAuth.Configuration);
 
                 var error = new AuthorizationErrorResponse
                 {
                     Error = "access_denied",
                     Error_Description = "The user denied your request",
-                    State = authorization.State
+                    State = authorizationRequest.State
                 };
 
-                return Response.AsErrorResponse(error, authorization.Redirect_Uri);
+                return Response.AsErrorResponse(error, authorizationRequest.Redirect_Uri);
             };
 
         }

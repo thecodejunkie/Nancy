@@ -3,7 +3,7 @@
     using System;
     using Xunit;
 
-    public class Authorization
+    public class AuthorizationRequest
     {
         public string Client_Id { get; set; }
         
@@ -22,6 +22,13 @@
                    !string.IsNullOrEmpty(this.Response_Type) &&
                    this.Response_Type.Equals("code", StringComparison.OrdinalIgnoreCase);
         }
+    }
+
+    public class AuthorizationResponse
+    {
+        public string Code { get; set; }
+
+        public string State { get; set; }        
     }
 
     public class AuthorizationErrorResponse

@@ -5,19 +5,19 @@
 
     public interface IAccessTokenPersister
     {
-        void Persist(string client_id, AccessToken accessToken, string scope);
+        void Persist(string client_id, AccessTokenResponse accessToken, string scope);
     }
 
     public class DefaultAccessTokenPersister : IAccessTokenPersister
     {
-        private readonly Dictionary<string, Tuple<AccessToken, string>> store;
+        private readonly Dictionary<string, Tuple<AccessTokenResponse, string>> store;
 
         public DefaultAccessTokenPersister()
         {
-            this.store = new Dictionary<string, Tuple<AccessToken, string>>();
+            this.store = new Dictionary<string, Tuple<AccessTokenResponse, string>>();
         }
 
-        public void Persist(string client_id, AccessToken accessToken, string scope)
+        public void Persist(string client_id, AccessTokenResponse accessToken, string scope)
         {
             this.store[client_id] = Tuple.Create(accessToken, scope);
         }

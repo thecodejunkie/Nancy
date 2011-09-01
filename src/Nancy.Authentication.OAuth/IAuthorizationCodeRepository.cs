@@ -1,25 +1,24 @@
 ﻿namespace Nancy.Authentication.OAuth
 {
-    using System;
-    using System.Collections.Specialized;
+    using System.Collections.Generic;
 
     public interface IAuthorizationCodeRepository
     {
-        void Store(string clientId, string code);
+        void Store(AuthorizationRequest authorizationRequest, string code);
     }
 
     public class AuthorizationCodeRepository : IAuthorizationCodeRepository
     {
-        private readonly NameValueCollection store;
+        private readonly Dictionary<AuthorizationRequest, string> store;
 
         public AuthorizationCodeRepository()
         {
-            this.store = new NameValueCollection();
+            this.store = new Dictionary<AuthorizationRequest, string>();
         }
 
-        public void Store(string clientId, string code)
+        public void Store(AuthorizationRequest authorizationRequest, string code)
         {
-            this.store.Add(clientId, code);
+            this.store.Add(authorizationRequest, code);
         }
     }
 }

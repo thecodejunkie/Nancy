@@ -2,8 +2,9 @@ namespace Nancy
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
-
+    using Nancy.Json;
     using Nancy.Responses;
 
     public static class ResponseExtensions
@@ -85,6 +86,44 @@ namespace Nancy
             }
 
             return response;
+        }
+
+        /// <summary>
+        /// Adds a JSON serialized models to the response body.
+        /// </summary>
+        /// <param name="response"><see cref="Response"/> object</param>
+        /// <param name="model">The model that should be serialized into the response body.</param>
+        /// <returns>The <see cref="Response"/> that was passed in, with the <paramref name="model"/> JSON serialized in the body.</returns>
+        public static Response WithJsonBody(this Response response, object model)
+        {
+            response.ContentType = "application/json";
+            response.Contents = stream =>
+            {
+
+                var serializer = new JavaScriptSerializer(null, false, JsonSettings.MaxJsonLength, JsonSettings.MaxRecursions);
+                var json = serializer.Serialize(model);
+
+                var writer = new StreamWriter(stream);
+
+                writer.Write(json);
+                writer.Flush();
+            };
+
+            return response;
+        }
+
+        /// <summary>
+        /// Adds HTTP headers, to the <see cref="Response"/>, that prevents caching.
+        /// </summary>
+        /// <param name="response"><see cref="Response"/> object</param>
+        /// <returns>The <see cref="Response"/> that was passed in, with the modified headers.</returns>
+        /// <remarks>Adds Cache-Control = no-store and Pragma = no-cache header values.</remarks>
+        public static Response WithNoCache(this Response response)
+        {
+            return response.WithHeaders(
+                new { Header = "Cache-Control", Value = "no-store" },
+                new { Header = "Pragma", Value = "no-cache" }
+            );
         }
 
         private static Tuple<string, string> GetTuple(object header)

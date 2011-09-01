@@ -9,6 +9,11 @@
     /// </summary>
     public interface IApplicationRepository
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="clientId"></param>
+        /// <returns>An <see cref="Application"/> instance if the application was found; otherwise <see langword="null" />.</returns>
         Application GetApplication(string clientId);
     }
 

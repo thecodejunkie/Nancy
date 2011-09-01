@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class Authentication
+    public class AccessTokenRequest
     {
         public string Client_Id { get; set; }
 

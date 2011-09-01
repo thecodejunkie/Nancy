@@ -46,8 +46,8 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Authentication.cs" />
-    <Compile Include="Authorization.cs" />
+    <Compile Include="AccessTokenRequest.cs" />
+    <Compile Include="AuthorizationRequest.cs" />
     <Compile Include="IAccessTokenPersister.cs" />
     <Compile Include="IAccessTokenGenerator.cs" />
     <Compile Include="IAuthenticationProvider.cs" />
