@@ -5,7 +5,7 @@
 
     public interface IAccessTokenPersister
     {
-        void Persist(string client_id, AccessTokenResponse accessToken, string scope);
+        void Persist(NancyContext context, AuthorizationRequest authorizationRequest, AccessTokenResponse accessToken);
     }
 
     public class DefaultAccessTokenPersister : IAccessTokenPersister
@@ -17,9 +17,9 @@
             this.store = new Dictionary<string, Tuple<AccessTokenResponse, string>>();
         }
 
-        public void Persist(string client_id, AccessTokenResponse accessToken, string scope)
+        public void Persist(NancyContext context, AuthorizationRequest authorizationRequest, AccessTokenResponse accessToken)
         {
-            this.store[client_id] = Tuple.Create(accessToken, scope);
+            this.store[authorizationRequest.Client_Id] = Tuple.Create(accessToken, authorizationRequest.Scope);
         }
     }
 }

@@ -4,16 +4,14 @@
     using System.Collections.Generic;
     using ModelBinding;
 
-    public class OAuthAuthenticationModule : NancyModule
+    public class OAuthAccessTokenModule : NancyModule
     {
-        public OAuthAuthenticationModule(
+        public OAuthAccessTokenModule(
             IAuthenticationProvider authenticationProvider,
             IAccessTokenGenerator accessTokenGenerator,
-            IAccessTokenPersister accessTokenPersister) : base(OAuth.Configuration.Base)
+            IAccessTokenPersister accessTokenPersister,
+            IAuthorizationCodeStore authorizationCodeStore) : base(OAuth.Configuration.Base)
         {
-            this.Before = OAuth.Configuration.PreRequest;
-
-            // Should this be a POST? Section 3.2 of the specification indicates it should
             Post[OAuth.Configuration.AuthenticationRoute] = parameters =>
             {
                 var accessTokenRequest =
@@ -30,12 +28,15 @@
                     // TODO: Handle invalid query
                 }
 
-                var cookie =
-                    OAuth.DecryptAndValidateCookie<AuthorizationRequest>(Request, OAuth.Configuration);
+                //var cookie =
+                //    OAuth.DecryptAndValidateCookie<AuthorizationRequest>(Request, OAuth.Configuration);
 
-                if (!string.IsNullOrEmpty(cookie.Redirect_Uri))
+                var authorizationRequest =
+                    authorizationCodeStore.Retrieve(accessTokenRequest.Code);
+
+                if (!string.IsNullOrEmpty(authorizationRequest.Redirect_Uri))
                 {
-                    if (!cookie.Redirect_Uri.Equals(accessTokenRequest.Redirect_Uri, StringComparison.OrdinalIgnoreCase))
+                    if (!authorizationRequest.Redirect_Uri.Equals(accessTokenRequest.Redirect_Uri, StringComparison.OrdinalIgnoreCase))
                     {
                         // This is an error
                     }
@@ -66,12 +67,12 @@
                 var token =
                     accessTokenGenerator.Generate();
 
-                accessTokenPersister.Persist(cookie.Client_Id, token, cookie.Scope);
+                accessTokenPersister.Persist(this.Context, authorizationRequest, token);
 
                 var responseToken = new AccessTokenResponse()
                 {
                     Access_Token = token.Access_Token,
-                    State = cookie.State ?? string.Empty
+                    State = authorizationRequest.State ?? string.Empty
                 };
 
                 // Set content-type to application/x-www-form-urlencoded

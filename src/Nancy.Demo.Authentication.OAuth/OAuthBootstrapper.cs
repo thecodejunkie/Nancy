@@ -34,7 +34,7 @@
                 new FormsAuthenticationConfiguration()
                 {
                     RedirectUrl = "~/login",
-                    UsernameMapper = container.Resolve<IUsernameMapper>(),
+                    UserMapper = container.Resolve<IUserMapper>(),
                 };
 
             FormsAuthentication.Enable(this, formsAuthConfiguration);

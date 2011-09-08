@@ -1,8 +1,7 @@
 namespace Nancy.Authentication.OAuth
 {
-    using System;
     using Nancy;
-    using Nancy.ModelBinding;
+    using ModelBinding;
 
     public class OAuthAuthorizationModule : NancyModule
     {
@@ -10,9 +9,11 @@ namespace Nancy.Authentication.OAuth
             IAuthorizationViewModelFactory authorizationViewModelFactory,
             IApplicationRepository applicationRepository,
             IAuthorizationCodeGenerator authorizationCodeGenerator,
-            IAuthorizationCodeRepository authorizationCodeRepository) : base(OAuth.Configuration.Base)
+            IAuthorizationCodeRepository authorizationCodeRepository,
+            IAuthorizationRequestStore authorizationRequestStore,
+            IAuthorizationCodeStore authorizationCodeStore) : base(OAuth.Configuration.Base)
         {
-            //this.Before = OAuth.Configuration.PreRequest;
+            OAuth.Configuration.SecureModule(this);
 
             Get[OAuth.Configuration.AuthorizationRequestRoute] = parameters =>
             {
@@ -46,18 +47,15 @@ namespace Nancy.Authentication.OAuth
                     return Response.AsErrorResponse(error, authorization.Redirect_Uri);
                 }
 
+                authorizationRequestStore.Store(authorization, this.Context);
+
                 var model = 
                     new { Application = application, Authorization = authorization };
 
                 var viewModel =
                     authorizationViewModelFactory.CreateViewModel(model.AsExpandoObject());
 
-                var response =
-                    (Response)View[OAuth.Configuration.AuthorizationView, viewModel];
-
-                OAuth.StoreAuthorization(response, authorization);
-
-                return response;
+                return View[OAuth.Configuration.AuthorizationView, viewModel]; ;
             };
 
             Post[OAuth.Configuration.AuthorizationAllowRoute] = parameters =>
@@ -66,9 +64,10 @@ namespace Nancy.Authentication.OAuth
                     authorizationCodeGenerator.Generate();
 
                 var authorizationRequest =
-                    OAuth.DecryptAndValidateCookie<AuthorizationRequest>(this.Request, OAuth.Configuration);
+                    authorizationRequestStore.Retrieve(this.Context);
 
-                authorizationCodeRepository.Store(authorizationRequest, authorizationCode);
+                authorizationCodeRepository.Store(this.Context, authorizationCode);
+                authorizationCodeStore.Store(authorizationCode, authorizationRequest);
 
                 var response = 
                     new AuthorizationResponse
@@ -78,14 +77,13 @@ namespace Nancy.Authentication.OAuth
                     };
 
                 return Response.AsRedirect(
-                    string.Concat(authorizationRequest.Redirect_Uri,
-                    response.AsQueryString()));
+                    string.Concat(authorizationRequest.Redirect_Uri, response.AsQueryString()));
             };
 
             Post[OAuth.Configuration.AuthorizationDenyRoute] = parameters =>
             {
                 var authorizationRequest =
-                    OAuth.DecryptAndValidateCookie<AuthorizationRequest>(this.Request, OAuth.Configuration);
+                    authorizationRequestStore.Retrieve(this.Context);
 
                 var error = new AuthorizationErrorResponse
                 {
@@ -93,6 +91,8 @@ namespace Nancy.Authentication.OAuth
                     Error_Description = "The user denied your request",
                     State = authorizationRequest.State
                 };
+
+                authorizationRequestStore.Clear(this.Context);
 
                 return Response.AsErrorResponse(error, authorizationRequest.Redirect_Uri);
             };

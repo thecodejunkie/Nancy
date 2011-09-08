@@ -11,7 +11,7 @@
     {
         public bool Authenticate(AccessTokenRequest accessTokenRequest)
         {
-            return accessTokenRequest.Client_Id.Equals("NancyApp");
+            return accessTokenRequest.Client_Id.Equals("NancyApp", StringComparison.OrdinalIgnoreCase);
         }
     }
 }

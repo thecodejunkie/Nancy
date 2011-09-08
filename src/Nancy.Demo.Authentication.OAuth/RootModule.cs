@@ -84,18 +84,24 @@ namespace Nancy.Demo.Authentication.OAuth
                 {
                     Client_Id = "NancyApp",
                     Client_Secret = "Secret",
-                    Code = Request.Query.code,
+                    Code = (string)Request.Query.Code,
                     Grant_Type = "authentication",
                     Redirect_Uri = HttpUtility.UrlEncode(Context.ToFullPath("~/oauthtokenresponse"))
                 };
+
+                //var targetUrl = string.Concat(
+                //    Context.ToFullPath("~" + OAuth.Configuration.Base + OAuth.Configuration.AuthenticationRoute),
+                //    request.AsQueryString());
 
                 var targetUrl = string.Concat(
                     "http://localhost:60644",
                     OAuth.Configuration.Base,
                     OAuth.Configuration.AuthenticationRoute);
 
-                var response = 
-                    HttpPost(targetUrl, request.AsQueryString().Substring(1));
+                var response = HttpPost(
+                    targetUrl,
+                    request.AsQueryString().Substring(1),
+                    this.Context);
 
                 using (var reader = new StreamReader(response.GetResponseStream()))
                 {
@@ -115,16 +121,16 @@ namespace Nancy.Demo.Authentication.OAuth
             };
         }
 
-        public static WebResponse HttpPost(string uri, string parameters)
+        public static WebResponse HttpPost(string uri, string parameters, NancyContext context)
         {
-            var req = WebRequest.Create(uri);
+            var req = 
+                (HttpWebRequest)WebRequest.Create(uri);
 
-            //Add these, as we're doing a POST
             req.ContentType = "application/x-www-form-urlencoded";
             req.Method = "POST";
 
-            //We need to count how many bytes we're sending. Post'ed Faked Forms should be name=value&
-            var bytes = Encoding.ASCII.GetBytes(parameters);
+            var bytes = 
+                Encoding.ASCII.GetBytes(parameters);
             req.ContentLength = bytes.Length;
             
             var os = req.GetRequestStream();

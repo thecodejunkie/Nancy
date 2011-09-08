@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,10 +54,12 @@
     <Compile Include="IAuthenticationProvider.cs" />
     <Compile Include="IAuthorizationCodeGenerator.cs" />
     <Compile Include="IAuthorizationCodeRepository.cs" />
+    <Compile Include="IAuthorizationCodeStore.cs" />
+    <Compile Include="IAuthorizationRequestStore.cs" />
     <Compile Include="IAuthorizationViewModelFactory.cs" />
     <Compile Include="IApplicationRepository.cs" />
     <Compile Include="OAuth.cs" />
-    <Compile Include="OAuthAuthenticationModule.cs" />
+    <Compile Include="OAuthAccessTokenModule.cs" />
     <Compile Include="OAuthAuthorizationModule.cs" />
     <Compile Include="OAuthConfiguration.cs" />
     <Compile Include="QuerystringExtensions.cs" />

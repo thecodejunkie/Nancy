@@ -82,6 +82,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DemoUserIdentity.cs" />
     <Compile Include="OAuthBootstrapper.cs" />
     <Compile Include="RootModule.cs" />
     <Compile Include="UserDatabase.cs" />

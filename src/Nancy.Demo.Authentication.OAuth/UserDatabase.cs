@@ -4,8 +4,9 @@ namespace Nancy.Demo.Authentication.OAuth
     using System.Collections.Generic;
     using System.Linq;
     using Nancy.Authentication.Forms;
+    using Nancy.Security;
 
-    public class UserDatabase : IUsernameMapper
+    public class UserDatabase : IUserMapper
     {
         private static List<Tuple<string, string, Guid>> users = new List<Tuple<string, string, Guid>>();
 
@@ -15,16 +16,13 @@ namespace Nancy.Demo.Authentication.OAuth
             users.Add(new Tuple<string, string, Guid>("user", "password", new Guid("56E1E49E-B7E8-4EEA-8459-7A906AC4D4C0")));
         }
 
-        public string GetUsernameFromIdentifier(Guid identifier)
+        public IUserIdentity GetUserFromIdentifier(Guid identifier)
         {
             var userRecord = users.Where(u => u.Item3 == identifier).FirstOrDefault();
 
-            if (userRecord == null)
-            {
-                return string.Empty;
-            }
-
-            return userRecord.Item1;
+            return userRecord == null
+                       ? null
+                       : new DemoUserIdentity { UserName = userRecord.Item1 };
         }
 
         public static Guid? ValidateUser(string username, string password)

@@ -1,4 +1,5 @@
 using Nancy.Cryptography;
+using Nancy.Security;
 
 namespace Nancy.Authentication.OAuth
 {
@@ -22,16 +23,31 @@ namespace Nancy.Authentication.OAuth
             this.AuthenticationRoute = "/access_token";
             this.Base = "/oauth";
             this.CryptographyConfiguration = CryptographyConfiguration.Default;
-            this.PreRequest = new BeforePipeline();
+
+            this.PreRequest = module =>
+            {
+                module.RequiresAuthentication();
+            };
         }
 
         public string Base { get; set; }
+        
         public string AuthorizationRequestRoute { get; set; }
+        
         public string AuthorizationAllowRoute { get; set; }
+        
         public string AuthorizationDenyRoute { get; set; }
+        
         public string AuthorizationView { get; set; }
+        
         public string AuthenticationRoute { get; set; }
-        public BeforePipeline PreRequest { get; set; }
+
+        public Action<NancyModule> PreRequest { get; set; }
+
+        public void SecureModule(NancyModule module)
+        {
+            this.PreRequest.Invoke(module);
+        }
 
         /// <summary>
         /// Gets or sets the cryptography configuration
