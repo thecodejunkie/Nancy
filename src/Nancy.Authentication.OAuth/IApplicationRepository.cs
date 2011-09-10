@@ -29,7 +29,8 @@
                 {
                     ClientId = "NancyApp", 
                     Description = "This is a Nancy application", 
-                    Name = "NancyApp"
+                    Name = "NancyApp",
+                    RedirectUri = "http://localhost:60644/authreturn"
                 },
 
                 new Application
@@ -54,6 +55,8 @@
         public string Description { get; set; }
 
         public string Name { get; set; }
+
+        public string RedirectUri { get; set; }
 
         public string Secret { get; set; }
     }

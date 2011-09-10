@@ -1,9 +1,10 @@
 ﻿namespace Nancy.Authentication.OAuth
 {
     using System;
+    using System.Collections.Generic;
     using Xunit;
 
-    public class AuthorizationRequest
+    public class AuthorizationCodeRequest
     {
         public string Client_Id { get; set; }
         
@@ -11,7 +12,7 @@
 
         public string Response_Type { get; set; }
         
-        public string Scope { get; set; }
+        public IEnumerable<string> Scope { get; set; }
         
         public string State { get; set; }
 

@@ -1,7 +1,8 @@
-using System;
 namespace Nancy.Authentication.OAuth
 {
+    using System;
     using System.Runtime.Caching;
+    using Security;
 
     /// <summary>
     /// Not sure if this should be taking in the context or just the NancyContext.CurrentUser. I think
@@ -9,11 +10,11 @@ namespace Nancy.Authentication.OAuth
     /// </summary>
     public interface IAuthorizationRequestStore
     {
-        void Clear(NancyContext context);
+        void Clear(IUserIdentity userIdentity);
 
-        AuthorizationRequest Retrieve(NancyContext context);
+        AuthorizationCodeRequest Retrieve(IUserIdentity userIdentity);
 
-        void Store(AuthorizationRequest authorizationRequest, NancyContext context);
+        void Store(IUserIdentity userIdentity, AuthorizationCodeRequest request);
     }
 
     public class DefaultAuthorizationRequestStore : IAuthorizationRequestStore
@@ -25,19 +26,19 @@ namespace Nancy.Authentication.OAuth
             this.cache = new MemoryCache("AuthorizationRequestCache");
         }
 
-        public void Clear(NancyContext context)
+        public void Clear(IUserIdentity userIdentity)
         {
-            this.cache.Remove(context.CurrentUser.UserName);
+            this.cache.Remove(userIdentity.UserName);
         }
 
-        public AuthorizationRequest Retrieve(NancyContext context)
+        public AuthorizationCodeRequest Retrieve(IUserIdentity userIdentity)
         {
-            return this.cache[context.CurrentUser.UserName] as AuthorizationRequest;
+            return this.cache[userIdentity.UserName] as AuthorizationCodeRequest;
         }
 
-        public void Store(AuthorizationRequest authorizationRequest, NancyContext context)
+        public void Store(IUserIdentity userIdentity, AuthorizationCodeRequest request)
         {
-            this.cache.Add(context.CurrentUser.UserName, authorizationRequest, DateTimeOffset.Now.Add(new TimeSpan(0, 10, 0)));
+            this.cache.Add(userIdentity.UserName, request, DateTimeOffset.Now.Add(new TimeSpan(0, 10, 0)));
         }
     }
 }

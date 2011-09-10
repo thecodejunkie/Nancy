@@ -20,6 +20,7 @@ namespace Nancy.Authentication.OAuth
             this.AuthorizationAllowRoute = "/allow";
             this.AuthorizationDenyRoute = "/deny";
             this.AuthorizationView = "authorize";
+            this.AuthorizationErrorView = "authorizeerror";
             this.AuthenticationRoute = "/access_token";
             this.Base = "/oauth";
             this.CryptographyConfiguration = CryptographyConfiguration.Default;
@@ -39,6 +40,8 @@ namespace Nancy.Authentication.OAuth
         public string AuthorizationDenyRoute { get; set; }
         
         public string AuthorizationView { get; set; }
+
+        public string AuthorizationErrorView { get; set; }
         
         public string AuthenticationRoute { get; set; }
 

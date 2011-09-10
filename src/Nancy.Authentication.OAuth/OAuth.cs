@@ -1,8 +1,6 @@
 ﻿namespace Nancy.Authentication.OAuth
 {
     using System;
-    using Nancy.Bootstrapper;
-
 
     /*
      * RESOURCES
@@ -15,31 +13,29 @@
         /// <summary>
         /// The configuration used by the OAuth provider.
         /// </summary>
-        public static OAuthConfiguration Configuration { get; private set; }
+        public static OAuthConfiguration Configuration = new OAuthConfiguration();
 
-        public static void Enable(IApplicationPipelines applicationPipelines)
+        public static bool IsEnabled { get; private set; }
+
+        public static void Enable()
         {
-            Enable(applicationPipelines, new OAuthConfiguration());
+            IsEnabled = true;
         }
 
-        public static void Enable(IApplicationPipelines applicationPipelines, Action<OAuthConfiguration> closure)
+        public static void Enable(Action<OAuthConfiguration> closure)
         {
             var configuration =
                 new OAuthConfiguration();
 
             closure.Invoke(configuration);
 
-            Enable(applicationPipelines, configuration);
+            Enable(configuration);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="applicationPipelines"></param>
-        /// <param name="configuration"></param>
-        public static void Enable(IApplicationPipelines applicationPipelines, OAuthConfiguration configuration)
+        public static void Enable(OAuthConfiguration configuration)
         {
             Configuration = configuration;
+            IsEnabled = true;
         }
     }
 }

@@ -13,10 +13,10 @@
             Get["/"] = parameters => {
                 
                 var returnUrl =
-                    HttpUtility.UrlEncode(Context.ToFullPath("~/authreturn"));
+                    "http%3A%2F%2Flocalhost%3A60644%2Fauthreturn";
 
                 var path =
-                    "~/oauth/authorize?Client_Id=NancyApp&&Response_Type=code&Redirect_Uri=" + returnUrl + "&state=ApplicationStateValue";
+                    "~/oauth/authorize?Client_Id=NancyApp&&Response_Type=code&Redirect_Uri=" + returnUrl + "&State=ApplicationStateValue&Scope=read,write";
 
                 return "<a href='" + Context.ToFullPath(path) + "'>Authorize</a>";
             };

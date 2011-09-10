@@ -17,9 +17,9 @@ namespace Nancy.Demo.Authentication.OAuth
         {
             Get["/authreturn"] = parameters =>
             {
-                if (Request.Query.error.HasValue)
+                if (Request.Query.Error.HasValue)
                 {
-                    return string.Concat(Request.Query.error, " - ", Request.Query["error_description"]);
+                    return string.Concat(Request.Query.Error, " - ", Request.Query["Error_Description"]);
                 }
 
                 var request = new AccessTokenRequest
@@ -45,15 +45,6 @@ namespace Nancy.Demo.Authentication.OAuth
                 {
                     return "The access token endpoint replied with : " + reader.ReadToEnd();
                 }
-            };
-
-            Get["/oauthtokenresponse"] = parameters =>
-            {
-                // This should be removed
-                var token = 
-                    this.Bind<AccessTokenResponse>();
-
-                return "Returned with oauth_token " + token.Access_Token;
             };
         }
 

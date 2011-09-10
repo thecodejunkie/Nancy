@@ -48,19 +48,24 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AccessTokenRequest.cs" />
-    <Compile Include="AuthorizationRequest.cs" />
+    <Compile Include="AccessTokenResponse.cs" />
+    <Compile Include="AuthorizationErrorType.cs" />
+    <Compile Include="AuthorizationCodeRequest.cs" />
+    <Compile Include="Database.cs" />
     <Compile Include="IAccessTokenPersister.cs" />
     <Compile Include="IAccessTokenGenerator.cs" />
     <Compile Include="IAuthenticationProvider.cs" />
     <Compile Include="IAuthorizationCodeGenerator.cs" />
-    <Compile Include="IAuthorizationCodeRepository.cs" />
+    <Compile Include="IAuthorizationCodeRequestScopeValidator.cs" />
     <Compile Include="IAuthorizationCodeStore.cs" />
+    <Compile Include="IAuthorizationErrorResponseBuilder.cs" />
     <Compile Include="IAuthorizationRequestStore.cs" />
-    <Compile Include="IAuthorizationViewModelFactory.cs" />
+    <Compile Include="IViewModelDecorator.cs" />
     <Compile Include="IApplicationRepository.cs" />
+    <Compile Include="IAuthorizationCodeRequestValidator.cs" />
     <Compile Include="OAuth.cs" />
     <Compile Include="OAuthAccessTokenModule.cs" />
-    <Compile Include="OAuthAuthorizationModule.cs" />
+    <Compile Include="AuthorizationCodeModule.cs" />
     <Compile Include="OAuthConfiguration.cs" />
     <Compile Include="QuerystringExtensions.cs" />
     <Compile Include="ResponseExtensions.cs" />

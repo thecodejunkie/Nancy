@@ -10,31 +10,27 @@
     
     public class AuthorizationFixture
     {
-        private readonly IAuthorizationViewModelFactory authorizationViewModelFactory;
+        private readonly IViewModelDecorator viewModelDecorator;
         private readonly IApplicationRepository applicationRepository;
         private readonly IAuthorizationCodeGenerator authorizationCodeGenerator;
-        private readonly IAuthorizationCodeRepository authorizationCodeRepository;
         private readonly ConfigurableBootstrapper bootstrapper;
         private readonly Browser browser;
 
         public AuthorizationFixture()
         {
-            this.authorizationViewModelFactory = A.Fake<IAuthorizationViewModelFactory>();
+            this.viewModelDecorator = A.Fake<IViewModelDecorator>();
             this.applicationRepository = A.Fake<IApplicationRepository>();
             this.authorizationCodeGenerator = A.Fake<IAuthorizationCodeGenerator>();
-            this.authorizationCodeRepository = A.Fake<IAuthorizationCodeRepository>();
 
             this.bootstrapper = new ConfigurableBootstrapper(with =>
             {
-                with.Module<OAuthAuthorizationModule>();
-                with.Dependency<IAuthorizationViewModelFactory>(this.authorizationViewModelFactory);
+                with.Module<AuthorizationCodeModule>();
+                with.Dependency<IViewModelDecorator>(this.viewModelDecorator);
                 with.Dependency<IApplicationRepository>(this.applicationRepository);
                 with.Dependency<IAuthorizationCodeGenerator>(this.authorizationCodeGenerator);
-                with.Dependency<IAuthorizationCodeRepository>(this.authorizationCodeRepository);
             });
 
-            var pipelines = A.Fake<IApplicationPipelines>();
-            OAuth.Enable(pipelines, with => {
+            OAuth.Enable(with => {
                 with.Base = "/oauth";
                 with.AuthorizationRequestRoute = "/authorize";
             });

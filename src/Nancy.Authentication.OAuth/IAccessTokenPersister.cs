@@ -1,25 +1,30 @@
 ﻿namespace Nancy.Authentication.OAuth
 {
-    using System;
     using System.Collections.Generic;
+    using Security;
 
     public interface IAccessTokenPersister
     {
-        void Persist(NancyContext context, AuthorizationRequest authorizationRequest, AccessTokenResponse accessToken);
+        void Persist(IUserIdentity userIdentity, AccessToken tokenResponse, IEnumerable<string> scopes);
     }
 
     public class DefaultAccessTokenPersister : IAccessTokenPersister
     {
-        private readonly Dictionary<string, Tuple<AccessTokenResponse, string>> store;
+        private readonly IDatabase database;
 
-        public DefaultAccessTokenPersister()
+        public DefaultAccessTokenPersister(IDatabase database)
         {
-            this.store = new Dictionary<string, Tuple<AccessTokenResponse, string>>();
+            this.database = database;
         }
 
-        public void Persist(NancyContext context, AuthorizationRequest authorizationRequest, AccessTokenResponse accessToken)
+        public void Persist(IUserIdentity userIdentity, AccessToken tokenResponse, IEnumerable<string> scopes)
         {
-            this.store[authorizationRequest.Client_Id] = Tuple.Create(accessToken, authorizationRequest.Scope);
+            this.database.SaveOAuthInformation(
+                userIdentity.UserName,
+                tokenResponse.Access_Token,
+                tokenResponse.Refresh_Token,
+                tokenResponse.Expires_In,
+                scopes);
         }
     }
 }

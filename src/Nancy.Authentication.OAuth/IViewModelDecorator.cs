@@ -6,12 +6,12 @@ namespace Nancy.Authentication.OAuth
     /// Responsible for creating the model that should be passed to the view that gives the
     /// client the alternative to Allow or Deny access to the account.
     /// </summary>
-    public interface IAuthorizationViewModelFactory
+    public interface IViewModelDecorator
     {
         dynamic CreateViewModel(dynamic model);
     }
 
-    public class DefaultAuthorizationViewModelFactory : IAuthorizationViewModelFactory
+    public class DefaultViewModelDecorator : IViewModelDecorator
     {
         public dynamic CreateViewModel(dynamic model)
         {

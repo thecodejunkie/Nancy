@@ -1,7 +1,6 @@
-using System;
-
 namespace Nancy.Authentication.OAuth
 {
+    using System;
     using System.Collections.Generic;
     using System.Dynamic;
     using System.Linq;

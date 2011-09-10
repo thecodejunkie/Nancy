@@ -28,7 +28,7 @@
             //    with.Base = "/oauth";
             //});
 
-            OAuth.Enable(this);
+            OAuth.Enable();
 
             var formsAuthConfiguration =
                 new FormsAuthenticationConfiguration()
