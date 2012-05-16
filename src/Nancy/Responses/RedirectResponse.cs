@@ -17,6 +17,7 @@ namespace Nancy.Responses
             this.Headers.Add("Location", location);
             this.Contents = GetStringContents(string.Empty);
             this.ContentType = "text/html";
+
             switch (type)
             {
                 case RedirectType.Permanent:
@@ -24,6 +25,9 @@ namespace Nancy.Responses
                     break;
                 case RedirectType.Temporary:
                     this.StatusCode = HttpStatusCode.TemporaryRedirect;
+                    break;
+                case RedirectType.Found:
+                    this.StatusCode = HttpStatusCode.Found;
                     break;
                 default:
                     this.StatusCode = HttpStatusCode.SeeOther;
@@ -47,7 +51,9 @@ namespace Nancy.Responses
             /// <summary>
             /// HTTP 303 - Redirect this request using an HTTP GET
             /// </summary>
-            SeeOther
+            SeeOther,
+
+            Found
         }
     }
 }

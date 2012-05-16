@@ -1,0 +1,18 @@
+﻿﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <form method="POST">
+        Username <input type="text" name="Username" value="admin" />
+        <br />
+        Password <input name="Password" type="password" value="password" />
+        <br />
+        Remember Me <input name="RememberMe" type="checkbox" value="True" />
+        <br />
+        <input type="submit" value="Login" />
+    </form>
+    <em>Hint! Try admin/password :)</em>
+</body>
+</html>
