@@ -172,19 +172,21 @@
 
         public AuthorizationRequestValidationResult ValidateRequest(AuthorizationRequest request, NancyContext context)
         {
-            return new AuthorizationRequestValidationResult(true, AuthorizationErrorType.None);
+            return new AuthorizationRequestValidationResult(AuthorizationErrorType.None);
         }
     }
 
     public class AuthorizationRequestValidationResult
     {
-        public AuthorizationRequestValidationResult(bool isValid, AuthorizationErrorType errorType)
+        public AuthorizationRequestValidationResult(AuthorizationErrorType errorType)
         {
-            IsValid = isValid;
-            ErrorType = errorType;
+            this.ErrorType = errorType;
         }
 
-        public bool IsValid { get; private set; }
+        public bool IsValid
+        {
+            get { return this.ErrorType == AuthorizationErrorType.None; }
+        }
 
         public AuthorizationErrorType ErrorType { get; set; }
     }
