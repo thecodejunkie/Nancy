@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using Authentication.Forms;
     using Nancy.Bootstrapper;
+    using Nancy.OAuth;
     using Security;
 
     public class DemoUserIdentity : IUserIdentity
@@ -26,6 +27,8 @@
                 };
 
             FormsAuthentication.Enable(pipelines, formsAuthConfiguration);
+
+            InMemorySessions.Enable(pipelines);
         }
     }
 }

@@ -36,7 +36,7 @@ namespace Nancy.OAuth
             {
                 Error = descriptions.Item1,
                 Error_Description = descriptions.Item2,
-                State = request.State
+                State = (request != null) ? request.State : string.Empty
             };
         }
     }

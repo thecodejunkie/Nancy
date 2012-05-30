@@ -43,6 +43,9 @@
     <Compile Include="AuthorizationEndPoint.cs" />
     <Compile Include="AuthorizationRequest.cs" />
     <Compile Include="IAuthorizationErrorResponseBuilder.cs" />
+    <Compile Include="InMemorySessionProvider.cs" />
+    <Compile Include="QuerystringExtensions.cs" />
+    <Compile Include="ResponseFormatterExtensions.cs" />
     <Compile Include="TokenEndPoint.cs" />
   </ItemGroup>
   <ItemGroup>
