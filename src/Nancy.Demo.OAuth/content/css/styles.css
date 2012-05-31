@@ -1,0 +1,17 @@
+﻿.container dl {
+   padding: 10px;
+}
+
+
+
+.container ul {
+    list-style-type:none;
+    list-style-position:outside;
+    margin:0px;
+    padding:0px;
+}
+
+.container li {
+    position:relative;
+	margin-bottom: 10px;
+}

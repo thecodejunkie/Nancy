@@ -41,7 +41,7 @@
             {
                 RedirectUrl = "http://nancyfx.org",
                 ResponseType = "code",
-                ClientId = "123454",
+                ClientId = "4D71889E-89D2-46DB-BC30-60428073B4AA",
                 Scope = new [] { "read", "write", "delete"},
                 State = "state"
             };

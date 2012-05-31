@@ -41,9 +41,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthorizationEndPoint.cs" />
+    <Compile Include="AuthorizationErrorResponse.cs" />
+    <Compile Include="AuthorizationErrorType.cs" />
     <Compile Include="AuthorizationRequest.cs" />
+    <Compile Include="AuthorizationRequestValidationResult.cs" />
+    <Compile Include="AuthorizationResponse.cs" />
+    <Compile Include="IAuthorizationEndPointService.cs" />
     <Compile Include="IAuthorizationErrorResponseBuilder.cs" />
-    <Compile Include="InMemorySessionProvider.cs" />
     <Compile Include="QuerystringExtensions.cs" />
     <Compile Include="ResponseFormatterExtensions.cs" />
     <Compile Include="TokenEndPoint.cs" />

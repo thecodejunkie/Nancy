@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Nancy OAuth 2 Demo</title>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href='@Url.Content("~/content/css/bootstrap.min.css")' rel="Stylesheet" />
+    <link href='@Url.Content("~/content/css/styles.css")' rel="Stylesheet" />
+
+    <link href='@Url.Content("~/content/css/bootstrap.min.css")' rel="Stylesheet" />
+
+    <script src='@Url.Content("~/content/js/jquery-1.7.2.min.js")'></script>
+    <script src='@Url.Content("~/content/js/bootstrap.min.js")'></script>
+    <script src='@Url.Content("~/content/js/bootstrap-dropdown.js")'></script>
+
+    <style type="text/css">
+        body {
+            padding-top: 60px;
+            padding-bottom: 40px;
+        }
+    </style>
+
+    <script>
+
+        $(document).ready(function () {
+            $('.dropdown-toggle').dropdown();
+        });
+    
+    </script>
+    
+</head>
+<body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/">Nancy OAuth 2 Demo</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+                <li><a href="/">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Applications <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/applications/create">Create</a></li>
+                        <li><a href="/applications/list">List</a></li>
+                    </ul>
+                </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+        @RenderBody()
+    </div>
+</body>
+</html>

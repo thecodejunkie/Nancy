@@ -5,12 +5,16 @@ namespace Nancy.Demo.OAuth
     using Extensions;
     using Nancy;
 
-    public class Home : NancyModule
+    public class HomeModule : NancyModule
     {
-        public Home()
+        public HomeModule()
         {
             Get["/"] = parameters => {
-                return "Up and running";
+                return View["index"];
+            };
+
+            Get["/create"] = parameters => {
+                return View["createapplication"];
             };
 
             Get["/logout"] = x =>

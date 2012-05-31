@@ -1,0 +1,32 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<dynamic>
+
+@{
+    Layout = "layout.cshtml";
+}
+
+<h1>Access request</h1>
+
+<p>
+    The @Model.Name application is requesting permissions to gain access to your account.
+</p>
+
+<p>
+	@Model.Body
+</p>
+
+<div class="well">
+    <dl>
+	    <dt>Permissions</dt>
+        @foreach(var permission in @Model.Permissions)
+        {
+            <dd>@permission</dd>
+        }
+    </dl>
+</div>
+
+<form method="post" action="/oauth/authorize/allow">
+	<input type="submit" value="Allow" class="btn">
+</form>
+<form method="post" action="/oauth/authorize/deny">
+	<input type="submit" value="Deny" class="btn">
+</form>

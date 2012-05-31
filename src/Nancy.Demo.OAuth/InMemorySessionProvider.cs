@@ -1,7 +1,7 @@
-﻿namespace Nancy.OAuth
+﻿namespace Nancy.Demo.OAuth
 {
     using Nancy.Bootstrapper;
-    using Session;
+    using Nancy.Session;
 
     /// <summary>
     /// Just a quick implementation until the session/cache provided changes are in Master

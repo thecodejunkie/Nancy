@@ -1,0 +1,29 @@
+﻿@using Nancy.Demo.OAuth
+@using System.Collections.Generic
+@using System.Linq
+@using System
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<IEnumerable<Nancy.Demo.OAuth.Application>>
+
+@{
+    Layout = "layout.cshtml";
+}
+
+<h1>Registered applications</h1>
+<div class="applications">
+    @foreach(var app in @Model.OrderBy(x => x.Name))
+    {
+        <dl>
+            <dt><h2>@app.Name</h2></dt>
+            <dd>
+                <ul>
+                    <li>Description: @app.Description</li>
+                    <li>Website: @app.Website.ToString()</li>
+                    <li>Callback: @app.Callback.ToString()</li>
+                    <li>Permissions: @string.Join(",", app.Permissions) </li>
+                    <li>Id: @app.Id.ToString("D")</li>
+                    <li><a href="/applications/display/@app.Id.ToString()">» View</a></li>
+                </ul>
+            </dd>
+        </dl>
+    }
+</div>

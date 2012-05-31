@@ -1,0 +1,16 @@
+﻿@{
+    Layout = "layout.cshtml";
+}
+
+<h1>Create an application</h1>
+<form class="well" action="/applications/create" method="post">
+    <label for="name">Name</label>
+	<input type="text" name="name" placeholder="The name of your application" />
+	<label for="description">Description</label>
+	<input type="text" name="description" placeholder="Short description of your application" />
+	<label for="website">Url</label>
+	<input type="text" name="website" placeholder="Your application's publicly accessible home page" />
+	<label for="callback">Callback Url</label>
+	<input type="text" name="callback" placeholder="Where should we return after successfully authenticating?" /><br />
+	<input type="submit" value="Create" class="btn" />
+</form>

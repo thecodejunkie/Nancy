@@ -1,0 +1,24 @@
+﻿@using Nancy.Demo.OAuth
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<Nancy.Demo.OAuth.Application>
+
+@{
+    Layout = "layout.cshtml";
+}
+
+<h1>@Model.Name</h1>
+<ul>
+    <li>Description: @Model.Description</li>
+    <li>Website: @Model.Website.ToString()</li>
+    <li>Callback: @Model.Callback.ToString()</li>
+    <dl>
+        <dt>Permissions</dt>
+        <dd>
+            <ul>
+                @foreach (var permission in @Model.Permissions)
+                {
+                    <li>@permission</li>
+                }
+            </ul>
+        </dd>
+    </dl>
+</ul>
