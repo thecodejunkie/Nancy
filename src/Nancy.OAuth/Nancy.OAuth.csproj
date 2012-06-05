@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccessTokenEndPoint.cs" />
+    <Compile Include="AccessTokenRequest.cs" />
     <Compile Include="AuthorizationEndPoint.cs" />
     <Compile Include="AuthorizationErrorResponse.cs" />
     <Compile Include="AuthorizationErrorType.cs" />

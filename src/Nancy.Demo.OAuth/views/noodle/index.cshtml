@@ -1,0 +1,41 @@
+﻿@using System.Collections.Generic;
+@using System.Linq;
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<IEnumerable<Nancy.Demo.OAuth.NoodleModel>>
+
+@{
+    Layout = "layout.cshtml";
+}
+
+<form method="POST">
+    <div class="contact-form well">
+        <ul>
+            <li>
+                <label for="author">Name</label>
+                <input type="text" name="author" placeholder="Enter your name" />
+            </li>
+            <li>
+                <label for="message">Message</label>
+                <textarea name="message" placeholder="Enter your message"></textarea><br/>
+            </li>
+            <li>
+                <input type="submit" value="Post" class="btn"/>
+            </li>
+        </ul>
+    </div>
+</form>
+        
+<div class="messages">
+    @foreach(var post in @Model.OrderByDescending(x => x.Posted))
+    {
+        <dl>
+            <dt>
+                <img src='@Url.Content("~/content/img/defaultavatar.jpg")'/>
+                » @post.Author<br/>
+                <span class="posted">&#64; @post.Posted.ToString()</span>
+            </dt>
+            <dd>
+                <pre>@Html.Raw(@post.Message)</pre>
+            </dd>
+        </dl>
+    }
+</div>

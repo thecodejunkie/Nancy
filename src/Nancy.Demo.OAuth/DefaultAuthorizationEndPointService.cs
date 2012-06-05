@@ -15,7 +15,7 @@
 
         public string GenerateAuthorizationToken(NancyContext context)
         {
-            return string.Concat("authorization-token-", Guid.NewGuid().ToString());
+            return string.Concat("authorization-token-", Guid.NewGuid().ToString("D"));
         }
 
         public Tuple<string, object> GetAuthorizationView(AuthorizationRequest request, NancyContext context)

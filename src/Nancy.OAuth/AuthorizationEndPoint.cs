@@ -37,7 +37,7 @@
 
                 // Use something more secure than the username
                 this.Session[Context.CurrentUser.UserName] = request;
-
+                
                 var authorizationView =
                     service.GetAuthorizationView(request, this.Context);
 
