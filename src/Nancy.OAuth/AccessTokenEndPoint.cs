@@ -1,5 +1,7 @@
 ﻿namespace Nancy.OAuth
 {
+    using System;
+    using Bootstrapper;
     using ModelBinding;
     using Security;
 
@@ -33,6 +35,27 @@
 
                 // TODO: need to set "Cache-Control: no-store" and "Pragma: no-cache" headers on the response to comply with the specification
                 return Response.AsJson(response);
+            };
+        }
+    }
+
+    public interface IOAuthLogin
+    {
+        IUserIdentity GetUser(string token);
+    }
+
+    public static class OAuthAuthentication
+    {
+        public static void Enable(IPipelines pipelines, IOAuthLogin login)
+        {
+            pipelines.BeforeRequest += ctx => {
+
+                if (ctx.Request.Query["access_token"].HasValue)
+                {
+                    ctx.CurrentUser = login.GetUser(ctx.Request.Query["access_token"]);
+                }
+
+                return null;
             };
         }
     }

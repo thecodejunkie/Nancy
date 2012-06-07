@@ -5,6 +5,7 @@ namespace Nancy.Demo.OAuth
     using System.Collections.Generic;
     using ModelBinding;
     using Nancy;
+    using Security;
 
     public class NoodleModule : NancyModule
     {
@@ -23,6 +24,24 @@ namespace Nancy.Demo.OAuth
                 service.Add(model);
 
                 return Response.AsRedirect("~/noodle");
+            };
+        }
+    }
+
+    public class NoodleApiModule : NancyModule
+    {
+        public NoodleApiModule(INoodleService service) : base("/noodle/api")
+        {
+            this.RequiresAuthentication();
+
+            Post["/"] = parameters => {
+                service.Add(new NoodleModel
+                {
+                    Author = string.Concat(Context.CurrentUser.UserName, " (from API)"),
+                    Message = "This message was automatically generated when posting from the API"
+                });
+
+                return 200;
             };
         }
     }

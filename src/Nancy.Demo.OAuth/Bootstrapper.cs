@@ -2,6 +2,7 @@
 {
     using Authentication.Forms;
     using Nancy.Bootstrapper;
+    using Nancy.OAuth;
 
     public class Bootstrapper : DefaultNancyBootstrapper
     {
@@ -17,6 +18,11 @@
                 };
 
             FormsAuthentication.Enable(pipelines, formsAuthConfiguration);
+
+            OAuthAuthentication.Enable(
+                pipelines, 
+                container.Resolve<IOAuthLogin>()
+            );
 
             InMemorySessions.Enable(pipelines);
         }

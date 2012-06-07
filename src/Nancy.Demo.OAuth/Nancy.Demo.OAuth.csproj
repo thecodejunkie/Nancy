@@ -87,6 +87,7 @@
     <Compile Include="IApplicationStore.cs" />
     <Compile Include="InMemorySessionProvider.cs" />
     <Compile Include="NoodleModule.cs" />
+    <Compile Include="OAuthLogin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserDatabase.cs" />
   </ItemGroup>
