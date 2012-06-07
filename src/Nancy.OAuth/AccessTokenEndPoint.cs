@@ -4,7 +4,7 @@
 
     public class AccessTokenEndPoint : NancyModule
     {
-        public AccessTokenEndPoint(IAccessTokenEndPointService service) : base("/oauth/access_token")
+        public AccessTokenEndPoint(IAccessTokenEndPointService service, IErrorResponseBuilder errorResponseBuilder) : base("/oauth/access_token")
         {
             Post["/"] = parameters =>{
 
@@ -17,12 +17,12 @@
                 // Needs to validate that the authorization code was issues to the logged in
                 // user and nobody else. Also need to verify the redirect_uri. Possibly verify
                 // that the code is still valid to use (time-to-live)
-                var result =
+                var results =
                     service.ValidateRequest(model, this.Context);
 
-                if (!result.IsValid)
+                if (!results.IsValid)
                 {
-                    // TODO: Return an error based on result.ErrorType
+                    //return Response.AsErrorResponse(errorResponseBuilder.Build(results.ErrorType, request), request.RedirectUrl);
                 }
 
                 var response =
@@ -32,6 +32,13 @@
                 return Response.AsJson(response);
             };
         }
+    }
+
+    public interface IAccessTokenEndPointService
+    {
+        AccessTokenResponse CreateAccessTokenResponse(AccessTokenRequest tokenRequest, NancyContext context);
+
+        ValidationResult ValidateRequest(AccessTokenRequest tokenRequest, NancyContext context);
     }
 
     public class AccessTokenResponse
@@ -68,12 +75,5 @@
         /// </summary>
         /// <remarks>This parameter is OPTIONAL, if identical to the scope requested by the client, otherwise REQUIRED.</remarks>
         public string Scope { get; set; }
-    }
-
-    public interface IAccessTokenEndPointService
-    {
-        AccessTokenResponse CreateAccessTokenResponse(AccessTokenRequest tokenRequest, NancyContext context);
-
-        ValidationResult ValidateRequest(AccessTokenRequest tokenRequest, NancyContext context);
     }
 }

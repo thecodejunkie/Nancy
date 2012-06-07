@@ -13,5 +13,10 @@
         }
 
         public ErrorType ErrorType { get; private set; }
+
+        public static implicit operator ValidationResult(ErrorType errorType)
+        {
+            return new ValidationResult(errorType);
+        }
     }
 }

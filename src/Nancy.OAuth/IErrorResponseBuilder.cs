@@ -5,7 +5,7 @@ namespace Nancy.OAuth
 
     public interface IErrorResponseBuilder
     {
-        ErrorResponse Build(ErrorType errorType, AuthorizationRequest request);
+        ErrorResponse Build(ErrorType errorType, string state);
     }
 
     public class DefaultErrorResponseBuilder : IErrorResponseBuilder
@@ -30,7 +30,7 @@ namespace Nancy.OAuth
                 };
         }
 
-        public ErrorResponse Build(ErrorType errorType, AuthorizationRequest request)
+        public ErrorResponse Build(ErrorType errorType, string state)
         {
             var descriptions =
                 this.errorDescriptions[errorType];
@@ -39,7 +39,7 @@ namespace Nancy.OAuth
             {
                 Error = descriptions.Item1,
                 Error_Description = descriptions.Item2,
-                State = (request != null) ? request.State : string.Empty
+                State = state
             };
         }
     }
