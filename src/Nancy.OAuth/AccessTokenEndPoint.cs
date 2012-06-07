@@ -1,6 +1,5 @@
 ﻿namespace Nancy.OAuth
 {
-    using System;
     using ModelBinding;
 
     public class AccessTokenEndPoint : NancyModule
@@ -75,48 +74,6 @@
     {
         AccessTokenResponse CreateAccessTokenResponse(AccessTokenRequest tokenRequest, NancyContext context);
 
-        AccessTokenRequestValidationResult ValidateRequest(AccessTokenRequest tokenRequest, NancyContext context);
-    }
-
-    public class DefaultAccessTokenEndPointService : IAccessTokenEndPointService
-    {
-        public AccessTokenResponse CreateAccessTokenResponse(AccessTokenRequest tokenRequest, NancyContext context)
-        {
-            return new AccessTokenResponse
-            {
-                Access_Token = string.Concat("access-token-", Guid.NewGuid().ToString("D"))
-            };
-        }
-
-        public AccessTokenRequestValidationResult ValidateRequest(AccessTokenRequest tokenRequest, NancyContext context)
-        {
-            return new AccessTokenRequestValidationResult(AccessTokenErrorType.None);
-        }
-    }
-
-    public enum AccessTokenErrorType
-    {
-        None,
-        InvalidRequest,
-        InvalidClient,
-        InvalidGrant,
-        UnauthorizedClient,
-        UnsupportedGrantType,
-        InvalidScope
-    }
-
-    public class AccessTokenRequestValidationResult
-    {
-        public AccessTokenRequestValidationResult(AccessTokenErrorType errorType)
-        {
-            this.ErrorType = errorType;
-        }
-
-        public AccessTokenErrorType ErrorType { get; set; }
-
-        public bool IsValid
-        {
-            get { return this.ErrorType == AccessTokenErrorType.None; }
-        }
+        ValidationResult ValidateRequest(AccessTokenRequest tokenRequest, NancyContext context);
     }
 }

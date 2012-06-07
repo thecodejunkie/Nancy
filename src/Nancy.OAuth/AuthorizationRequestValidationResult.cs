@@ -1,17 +1,17 @@
 ﻿namespace Nancy.OAuth
 {
-    public class AuthorizationRequestValidationResult
+    public class ValidationResult
     {
-        public AuthorizationRequestValidationResult(AuthorizationErrorType errorType)
+        public ValidationResult(ErrorType errorType)
         {
             this.ErrorType = errorType;
         }
 
         public bool IsValid
         {
-            get { return this.ErrorType == AuthorizationErrorType.None; }
+            get { return this.ErrorType == ErrorType.None; }
         }
 
-        public AuthorizationErrorType ErrorType { get; set; }
+        public ErrorType ErrorType { get; private set; }
     }
 }

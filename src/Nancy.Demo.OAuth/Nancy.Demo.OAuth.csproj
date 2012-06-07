@@ -78,6 +78,7 @@
     <Compile Include="ApplicationsModule.cs" />
     <Compile Include="AuthorizeViewModel.cs" />
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="DefaultAccessTokenEndPointService.cs" />
     <Compile Include="DefaultAuthorizationEndPointService.cs" />
     <Compile Include="DemoUserIdentity.cs" />
     <Compile Include="HomeModule.cs" />

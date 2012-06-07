@@ -43,13 +43,13 @@
     <Compile Include="AccessTokenEndPoint.cs" />
     <Compile Include="AccessTokenRequest.cs" />
     <Compile Include="AuthorizationEndPoint.cs" />
-    <Compile Include="AuthorizationErrorResponse.cs" />
-    <Compile Include="AuthorizationErrorType.cs" />
+    <Compile Include="ErrorResponse.cs" />
+    <Compile Include="ErrorType.cs" />
     <Compile Include="AuthorizationRequest.cs" />
     <Compile Include="AuthorizationRequestValidationResult.cs" />
     <Compile Include="AuthorizationResponse.cs" />
     <Compile Include="IAuthorizationEndPointService.cs" />
-    <Compile Include="IAuthorizationErrorResponseBuilder.cs" />
+    <Compile Include="IErrorResponseBuilder.cs" />
     <Compile Include="QuerystringExtensions.cs" />
     <Compile Include="ResponseFormatterExtensions.cs" />
     <Compile Include="TokenEndPoint.cs" />

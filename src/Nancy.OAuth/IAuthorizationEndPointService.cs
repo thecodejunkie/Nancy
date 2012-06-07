@@ -35,6 +35,6 @@
         /// Thing you are going to want to validate are the client_id, redirect_url (is it valid? does it match the
         /// one that's registered for the application with client_id) and so on
         /// </summary>
-        AuthorizationRequestValidationResult ValidateRequest(AuthorizationRequest request, NancyContext context);
+        ValidationResult ValidateRequest(AuthorizationRequest request, NancyContext context);
     }
 }

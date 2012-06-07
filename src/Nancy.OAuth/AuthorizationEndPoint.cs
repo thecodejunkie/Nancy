@@ -13,7 +13,7 @@
         /// </summary>
         public AuthorizationEndPoint(
             IAuthorizationEndPointService service, 
-            IAuthorizationErrorResponseBuilder errorResponseBuilder) : base("/oauth/authorize")
+            IErrorResponseBuilder errorResponseBuilder) : base("/oauth/authorize")
         {
             this.RequiresAuthentication();
 
@@ -77,7 +77,7 @@
 
                 return request == null ? 
                     HttpStatusCode.InternalServerError : 
-                    Response.AsErrorResponse(errorResponseBuilder.Build(AuthorizationErrorType.AccessDenied, request), request.RedirectUrl);
+                    Response.AsErrorResponse(errorResponseBuilder.Build(ErrorType.AccessDenied, request), request.RedirectUrl);
             };
         }
     }
