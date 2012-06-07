@@ -32,7 +32,7 @@
 
                 if (!results.IsValid)
                 {
-                    return Response.AsErrorResponse(errorResponseBuilder.Build(results.ErrorType, request), request.RedirectUrl);
+                    return Response.AsErrorResponse(errorResponseBuilder.Build(results.ErrorType, request.State), request.RedirectUrl);
                 }
 
                 // Use something more secure than the username
@@ -64,7 +64,6 @@
                     };
 
                 // TODO: Perhaps use an UriBuilder instead?
-                // TODO: probably should perform encoding on the parameters in the querystring
                 var url =
                     string.Concat(request.RedirectUrl, response.AsQueryString());
 
@@ -77,7 +76,7 @@
 
                 return request == null ? 
                     HttpStatusCode.InternalServerError : 
-                    Response.AsErrorResponse(errorResponseBuilder.Build(ErrorType.AccessDenied, request), request.RedirectUrl);
+                    Response.AsErrorResponse(errorResponseBuilder.Build(ErrorType.AccessDenied, request.State), request.RedirectUrl);
             };
         }
     }

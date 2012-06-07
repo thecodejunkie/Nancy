@@ -53,7 +53,7 @@
         string Retrieve(string key);
     }
 
-    public class DefaultAccessTokenStore : IAuthorizationTokenStore
+    public class DefaultAccessTokenStore : IAccessTokenStore
     {
         private readonly MemoryCache cache;
 

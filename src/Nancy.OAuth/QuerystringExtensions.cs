@@ -12,7 +12,7 @@
                 .GetType()
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(x => x.GetValue(source, null) != null)
-                .Select(x => string.Concat(x.Name, "=", HttpUtility.UrlEncode((string) x.GetValue(source, null).ToString())));
+                .Select(x => string.Concat(x.Name.ToLower(), "=", HttpUtility.UrlEncode(x.GetValue(source, null).ToString())));
 
             return string.Concat("?", string.Join("&", keyValuePairs));
         }

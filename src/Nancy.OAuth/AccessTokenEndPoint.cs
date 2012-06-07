@@ -1,14 +1,17 @@
 ﻿namespace Nancy.OAuth
 {
     using ModelBinding;
+    using Security;
 
     public class AccessTokenEndPoint : NancyModule
     {
         public AccessTokenEndPoint(IAccessTokenEndPointService service, IErrorResponseBuilder errorResponseBuilder) : base("/oauth/access_token")
         {
+            this.RequiresAuthentication();
+
             Post["/"] = parameters =>{
 
-                var model =
+                var request =
                     this.Bind<AccessTokenRequest>();
 
                 // Perhaps always validate that the grant type == "authorization_code" and
@@ -18,15 +21,15 @@
                 // user and nobody else. Also need to verify the redirect_uri. Possibly verify
                 // that the code is still valid to use (time-to-live)
                 var results =
-                    service.ValidateRequest(model, this.Context);
+                    service.ValidateRequest(request, this.Context);
 
                 if (!results.IsValid)
                 {
-                    //return Response.AsErrorResponse(errorResponseBuilder.Build(results.ErrorType, request), request.RedirectUrl);
+                    return Response.AsErrorResponse(errorResponseBuilder.Build(results.ErrorType, null), request.RedirectUri);
                 }
 
                 var response =
-                    service.CreateAccessTokenResponse(model, this.Context);
+                    service.CreateAccessTokenResponse(request, this.Context);
 
                 // TODO: need to set "Cache-Control: no-store" and "Pragma: no-cache" headers on the response to comply with the specification
                 return Response.AsJson(response);
