@@ -50,6 +50,7 @@
     <Compile Include="AuthorizationResponse.cs" />
     <Compile Include="IAuthorizationEndPointService.cs" />
     <Compile Include="IErrorResponseBuilder.cs" />
+    <Compile Include="OAuth.cs" />
     <Compile Include="QuerystringExtensions.cs" />
     <Compile Include="ResponseFormatterExtensions.cs" />
     <Compile Include="TokenEndPoint.cs" />

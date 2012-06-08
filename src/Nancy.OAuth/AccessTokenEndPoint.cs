@@ -1,6 +1,5 @@
 ﻿namespace Nancy.OAuth
 {
-    using System;
     using Bootstrapper;
     using ModelBinding;
     using Security;

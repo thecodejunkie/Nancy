@@ -19,6 +19,8 @@
 
             FormsAuthentication.Enable(pipelines, formsAuthConfiguration);
 
+            OAuth.Enable();
+
             OAuthAuthentication.Enable(
                 pipelines, 
                 container.Resolve<IOAuthLogin>()

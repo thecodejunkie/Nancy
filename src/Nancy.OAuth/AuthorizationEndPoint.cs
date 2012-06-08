@@ -13,11 +13,12 @@
         /// </summary>
         public AuthorizationEndPoint(
             IAuthorizationEndPointService service, 
-            IErrorResponseBuilder errorResponseBuilder) : base("/oauth/authorize")
+            IErrorResponseBuilder errorResponseBuilder) : base(OAuth.Configuration.GetFullPath(x => x.AuthorizationRequestRoute))
         {
             this.RequiresAuthentication();
 
-            Get["/"] = parameters =>{
+            Get["/", ctx => OAuth.IsEnabled] = parameters => {
+
                 var request =
                     this.Bind<AuthorizationRequest>();
 
@@ -44,7 +45,8 @@
                 return View[authorizationView.Item1, authorizationView.Item2];
             };
 
-            Post["/allow"] = parameters => {
+            Post[OAuth.Configuration.AuthorizationAllowRoute, ctx => OAuth.IsEnabled] = parameters => {
+
                 var token =
                     service.GenerateAuthorizationToken(this.Context);
 
@@ -70,7 +72,8 @@
                 return Response.AsRedirect(url, RedirectResponse.RedirectType.Found);
             };
 
-            Post["/deny"] = parameters => {
+            Post[OAuth.Configuration.AuthorizationDenyRoute, ctx => OAuth.IsEnabled] = parameters => {
+
                 var request =
                     this.Session[Context.CurrentUser.UserName] as AuthorizationRequest;
 
