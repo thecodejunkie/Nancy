@@ -41,7 +41,7 @@
             private readonly IEnumerable<IResponseProcessor> responseProcessors;
             private readonly IEnumerable<IRouteSegmentConstraint> routeSegmentConstraints;
             private readonly ICultureService cultureService;
-            private readonly IRouteMetadataProvider routeMetadataProvider;
+            private readonly IEnumerable<IRouteMetadataProvider> routeMetadataProviders;
 
             public FakeDiagnostics(
                 DiagnosticsConfiguration diagnosticsConfiguration,
@@ -52,7 +52,7 @@
                 IEnumerable<IResponseProcessor> responseProcessors,
                 IEnumerable<IRouteSegmentConstraint> routeSegmentConstraints,
                 ICultureService cultureService,
-                IRouteMetadataProvider routeMetadataProvider)
+                IEnumerable<IRouteMetadataProvider> routeMetadataProviders)
             {
                 this.diagnosticsConfiguration = diagnosticsConfiguration;
                 this.diagnosticProviders = (new IDiagnosticsProvider[] { new FakeDiagnosticsProvider() }).ToArray();
@@ -63,7 +63,7 @@
                 this.responseProcessors = responseProcessors;
                 this.routeSegmentConstraints = routeSegmentConstraints;
                 this.cultureService = cultureService;
-                this.routeMetadataProvider = routeMetadataProvider;
+                this.routeMetadataProviders = routeMetadataProviders;
             }
 
             public void Initialize(IPipelines pipelines)
@@ -78,7 +78,7 @@
                     this.responseProcessors,
                     this.routeSegmentConstraints,
                     this.cultureService,
-                    this.routeMetadataProvider);
+                    this.routeMetadataProviders);
             }
         }
 

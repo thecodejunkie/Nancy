@@ -23,7 +23,7 @@
         private readonly IEnumerable<IResponseProcessor> responseProcessors; 
         private readonly IEnumerable<IRouteSegmentConstraint> routeSegmentConstraints;
         private readonly ICultureService cultureService;
-        private readonly IRouteMetadataProvider reouteMetadataProvider;
+        private readonly IEnumerable<IRouteMetadataProvider> routeMetadataProviders;
 
         public DefaultDiagnostics(
             DiagnosticsConfiguration diagnosticsConfiguration,
@@ -35,7 +35,7 @@
             IEnumerable<IResponseProcessor> responseProcessors,
             IEnumerable<IRouteSegmentConstraint> routeSegmentConstraints,
             ICultureService cultureService,
-            IRouteMetadataProvider reouteMetadataProvider)
+            IEnumerable<IRouteMetadataProvider> routeMetadataProviders)
         {
             this.diagnosticsConfiguration = diagnosticsConfiguration;
             this.diagnosticProviders = diagnosticProviders;
@@ -46,7 +46,7 @@
             this.responseProcessors = responseProcessors;
             this.routeSegmentConstraints = routeSegmentConstraints;
             this.cultureService = cultureService;
-            this.reouteMetadataProvider = reouteMetadataProvider;
+            this.routeMetadataProviders = routeMetadataProviders;
         }
 
         /// <summary>
@@ -65,7 +65,7 @@
                 this.responseProcessors,
                 this.routeSegmentConstraints,
                 this.cultureService,
-                this.reouteMetadataProvider);
+                this.routeMetadataProviders);
         }
     }
 }

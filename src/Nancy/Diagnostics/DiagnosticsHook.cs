@@ -39,11 +39,11 @@ namespace Nancy.Diagnostics
             IEnumerable<IResponseProcessor> responseProcessors,
             IEnumerable<IRouteSegmentConstraint> routeSegmentConstraints,
             ICultureService cultureService,
-            IRouteMetadataProvider routeMetadataProvider)
+            IEnumerable<IRouteMetadataProvider> routeMetadataProviders)
         {
             var diagnosticsModuleCatalog = new DiagnosticsModuleCatalog(providers, rootPathProvider, requestTracing, configuration, diagnosticsConfiguration);
 
-            var diagnosticsRouteCache = new RouteCache(diagnosticsModuleCatalog, new DefaultNancyContextFactory(cultureService), new DefaultRouteSegmentExtractor(), new DefaultRouteDescriptionProvider(), cultureService, routeMetadataProvider);
+            var diagnosticsRouteCache = new RouteCache(diagnosticsModuleCatalog, new DefaultNancyContextFactory(cultureService), new DefaultRouteSegmentExtractor(), new DefaultRouteDescriptionProvider(), cultureService, routeMetadataProviders);
 
             var diagnosticsRouteResolver = new DefaultRouteResolver(
                 diagnosticsModuleCatalog,
