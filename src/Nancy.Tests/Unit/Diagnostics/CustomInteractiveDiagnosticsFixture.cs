@@ -10,6 +10,7 @@
     using Nancy.Diagnostics;
     using Nancy.ModelBinding;
     using Nancy.Responses.Negotiation;
+    using Nancy.Routing;
     using Nancy.Routing.Constraints;
     using Nancy.Testing;
     using Nancy.Tests; //While this directive is redundant, it's required to build on mono 2.x to allow it to resolve the Should* extension methods
@@ -40,6 +41,7 @@
             private readonly IEnumerable<IResponseProcessor> responseProcessors;
             private readonly IEnumerable<IRouteSegmentConstraint> routeSegmentConstraints;
             private readonly ICultureService cultureService;
+            private readonly IRouteMetadataProvider routeMetadataProvider;
 
             public FakeDiagnostics(
                 DiagnosticsConfiguration diagnosticsConfiguration,
@@ -49,7 +51,8 @@
                 IModelBinderLocator modelBinderLocator,
                 IEnumerable<IResponseProcessor> responseProcessors,
                 IEnumerable<IRouteSegmentConstraint> routeSegmentConstraints,
-                ICultureService cultureService)
+                ICultureService cultureService,
+                IRouteMetadataProvider routeMetadataProvider)
             {
                 this.diagnosticsConfiguration = diagnosticsConfiguration;
                 this.diagnosticProviders = (new IDiagnosticsProvider[] { new FakeDiagnosticsProvider() }).ToArray();
@@ -60,6 +63,7 @@
                 this.responseProcessors = responseProcessors;
                 this.routeSegmentConstraints = routeSegmentConstraints;
                 this.cultureService = cultureService;
+                this.routeMetadataProvider = routeMetadataProvider;
             }
 
             public void Initialize(IPipelines pipelines)
@@ -73,7 +77,8 @@
                     this.modelBinderLocator,
                     this.responseProcessors,
                     this.routeSegmentConstraints,
-                    this.cultureService);
+                    this.cultureService,
+                    this.routeMetadataProvider);
             }
         }
 

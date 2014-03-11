@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using ModelBinding;
     using Nancy.Bootstrapper;
+    using Nancy.Routing;
     using Nancy.Routing.Constraints;
 
     using Responses.Negotiation;
@@ -22,6 +23,7 @@
         private readonly IEnumerable<IResponseProcessor> responseProcessors; 
         private readonly IEnumerable<IRouteSegmentConstraint> routeSegmentConstraints;
         private readonly ICultureService cultureService;
+        private readonly IRouteMetadataProvider reouteMetadataProvider;
 
         public DefaultDiagnostics(
             DiagnosticsConfiguration diagnosticsConfiguration,
@@ -32,7 +34,8 @@
             IModelBinderLocator modelBinderLocator,
             IEnumerable<IResponseProcessor> responseProcessors,
             IEnumerable<IRouteSegmentConstraint> routeSegmentConstraints,
-            ICultureService cultureService)
+            ICultureService cultureService,
+            IRouteMetadataProvider reouteMetadataProvider)
         {
             this.diagnosticsConfiguration = diagnosticsConfiguration;
             this.diagnosticProviders = diagnosticProviders;
@@ -43,6 +46,7 @@
             this.responseProcessors = responseProcessors;
             this.routeSegmentConstraints = routeSegmentConstraints;
             this.cultureService = cultureService;
+            this.reouteMetadataProvider = reouteMetadataProvider;
         }
 
         /// <summary>
@@ -60,7 +64,8 @@
                 this.modelBinderLocator,
                 this.responseProcessors,
                 this.routeSegmentConstraints,
-                this.cultureService);
+                this.cultureService,
+                this.reouteMetadataProvider);
         }
     }
 }
