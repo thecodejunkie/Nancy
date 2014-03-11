@@ -74,10 +74,13 @@ namespace Nancy.Bootstrapper
                     RouteResolverTrie = typeof(RouteResolverTrie),
                     TrieNodeFactory = typeof(TrieNodeFactory),
                     RouteSegmentConstraints = AppDomainAssemblyTypeScanner.TypesOf<IRouteSegmentConstraint>().ToList(),
-                    RequestTraceFactory = typeof(DefaultRequestTraceFactory)
+                    RequestTraceFactory = typeof(DefaultRequestTraceFactory),
+                    RouteMetadataProvider = typeof(DefaultRouteMetadataProvider)
                 };
             }
         }
+
+        public Type RouteMetadataProvider { get; set; }
 
         public Type RouteResolver { get; set; }
 
@@ -234,6 +237,7 @@ namespace Nancy.Bootstrapper
                 new TypeRegistration(typeof(IRouteResolverTrie), this.RouteResolverTrie), 
                 new TypeRegistration(typeof(ITrieNodeFactory), this.TrieNodeFactory), 
                 new TypeRegistration(typeof(IRequestTraceFactory), this.RequestTraceFactory), 
+                new TypeRegistration(typeof(IRouteMetadataProvider), this.RouteMetadataProvider), 
             };
         }
 
