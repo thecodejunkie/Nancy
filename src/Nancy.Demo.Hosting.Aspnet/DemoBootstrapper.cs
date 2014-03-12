@@ -8,7 +8,6 @@
     using Nancy.Security;
     using Nancy.Session;
     using Nancy.TinyIoc;
-    using Nancy.ViewEngines;
     using Nancy.ViewEngines.Razor;
 
     public class DemoBootstrapper : DefaultNancyBootstrapper
