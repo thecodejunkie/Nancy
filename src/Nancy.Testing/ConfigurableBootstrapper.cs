@@ -1674,15 +1674,47 @@ namespace Nancy.Testing
                 return this;
             }
 
+            /// <summary>
+            /// Configures the bootstrapper to create an <see cref="IRouteSegmentConstraint"/> instance of the specified type.
+            /// </summary>
+            /// <typeparam name="T">The type of the <see cref="IRouteSegmentConstraint"/> that the bootstrapper should use.</typeparam>
+            /// <returns>A reference to the current <see cref="ConfigurableBootstrapperConfigurator"/>.</returns>
             public ConfigurableBootstrapperConfigurator RouteSegmentConstraint<T>() where T : IRouteSegmentConstraint
             {
                 this.bootstrapper.configuration.RouteSegmentConstraints = new List<Type> { typeof(T) };
                 return this;
             }
 
+            /// <summary>
+            /// Configures the bootstrapper to use specific route segment constraints.
+            /// </summary>
+            /// <param name="types">Collection of route segment constraint types</param>
+            /// <returns>A reference to the current <see cref="ConfigurableBootstrapperConfigurator"/>.</returns>
             public ConfigurableBootstrapperConfigurator RouteSegmentConstraints(params Type[] types)
             {
                 this.bootstrapper.configuration.RouteSegmentConstraints = new List<Type>(types);
+                return this;
+            }
+
+            /// <summary>
+            /// Configures the bootstrapper to create an <see cref="IRouteMetadataProvider"/> instance of the specified type.
+            /// </summary>
+            /// <typeparam name="T">The type of the <see cref="IRouteMetadataProvider"/> that the bootstrapper should use.</typeparam>
+            /// <returns>A reference to the current <see cref="ConfigurableBootstrapperConfigurator"/>.</returns>
+            public ConfigurableBootstrapperConfigurator RouteMetadataProvider<T>() where T : IRouteMetadataProvider
+            {
+                this.bootstrapper.configuration.RouteMetadataProviders = new List<Type> { typeof(T) };
+                return this;
+            }
+
+            /// <summary>
+            /// Configures the bootstrapper to use specific route metadata providers.
+            /// </summary>
+            /// <param name="types">Collection of route metadata provider types</param>
+            /// <returns>A reference to the current <see cref="ConfigurableBootstrapperConfigurator"/>.</returns>
+            public ConfigurableBootstrapperConfigurator RouteMetadataProviders(params Type[] types)
+            {
+                this.bootstrapper.configuration.RouteMetadataProviders = new List<Type>(types);
                 return this;
             }
 
