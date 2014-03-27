@@ -45,7 +45,7 @@
         {
             foreach (var cookie in cookies)
             {
-                negotiator.WithCookie(cookie);
+                negotiator.Cookie(cookie);
             }
             
             return negotiator;
