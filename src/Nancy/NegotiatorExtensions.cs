@@ -248,7 +248,6 @@
         public static Negotiator DefaultModel(this Negotiator negotiator, dynamic model)
         {
             negotiator.NegotiationContext.DefaultModel = model;
-
             return negotiator;
         }
 
@@ -273,7 +272,6 @@
         public static Negotiator View(this Negotiator negotiator, string viewName)
         {
             negotiator.NegotiationContext.ViewName = viewName;
-
             return negotiator;
         }
 
