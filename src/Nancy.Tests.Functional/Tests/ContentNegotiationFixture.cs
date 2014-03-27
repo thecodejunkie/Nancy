@@ -403,7 +403,7 @@ namespace Nancy.Tests.Functional.Tests
                     {
                         config.WithModel("the model");
                         config.WithAllowedMediaRange("test/test");
-                        config.WithMediaRangeModel<string>("test/test", "media model");
+                        config.WithMediaRangeModel("test/test", "media model");
                     }));
                 }));
             });

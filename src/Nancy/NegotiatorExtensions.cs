@@ -113,6 +113,11 @@
         /// <returns>Modified negotiator</returns>
         public static Negotiator WithAllowedMediaRange(this Negotiator negotiator, MediaRange mediaRange)
         {
+            if (negotiator.NegotiationContext.PermissableMediaRanges.Contains(mediaRange))
+            {
+                return negotiator;
+            }
+
             var wildcards =
                 negotiator.NegotiationContext.PermissableMediaRanges.Where(
                     mr => mr.Type.IsWildcard && mr.Subtype.IsWildcard).ToArray();
@@ -153,14 +158,17 @@
             return negotiator;
         }
 
-        public static Negotiator WithMediaRangeModel<TModel>(this Negotiator negotiator, MediaRange range, dynamic model)
+        public static Negotiator WithMediaRangeModel<TModel>(this Negotiator negotiator, MediaRange range, TModel model)
         {
-            return negotiator.WithMediaRangeModel<TModel>(range, () => model);
+            negotiator.WithAllowedMediaRange(range);
+            negotiator.NegotiationContext.MediaRangeModelMappings.Add(range, new MediaRangeModelData(typeof(TModel), () => model));
+
+            return negotiator;
         }
 
-        public static Negotiator WithMediaRangeModel<TModel>(this Negotiator negotiator, MediaRange range, Func<dynamic> modelFactory)
+        public static Negotiator WithMediaRangeModel<TModel>(this Negotiator negotiator, MediaRange range, Func<TModel> modelFactory)
         {
-            negotiator.NegotiationContext.PermissableMediaRanges.Add(range);
+            negotiator.WithAllowedMediaRange(range);
             negotiator.NegotiationContext.MediaRangeModelMappings.Add(range, new MediaRangeModelData(typeof(TModel), modelFactory));
 
             return negotiator;
@@ -205,7 +213,7 @@
         /// <returns>Updated negotiator object</returns>
         public static Negotiator WithMediaRangeResponse(this Negotiator negotiator, MediaRange range, Response response)
         {
-            return negotiator.WithMediaRangeResponse(range, () => response);
+            return negotiator.WithMediaRangeModel(range, response);
         }
 
         /// <summary>
@@ -218,7 +226,7 @@
         /// <returns>Updated negotiator object</returns>
         public static Negotiator WithMediaRangeResponse(this Negotiator negotiator, MediaRange range, Func<Response> responseFactory)
         {
-            return negotiator.WithMediaRangeModel<Response>(range, responseFactory);
+            return negotiator.WithMediaRangeModel(range, responseFactory);
         }
 
         /// <summary>
@@ -260,17 +268,15 @@
         private static Tuple<string, string> GetTuple(object header)
         {
             var properties = header.GetType()
-                                   .GetProperties()
-                                   .Where(prop => prop.CanRead && prop.PropertyType == typeof(string))
-                                   .ToArray();
+                .GetProperties()
+                .Where(prop => prop.CanRead && prop.PropertyType == typeof(string))
+                .ToArray();
 
-            var headerProperty = properties
-                                    .Where(p => string.Equals(p.Name, "Header", StringComparison.InvariantCultureIgnoreCase))
-                                    .FirstOrDefault();
+            var headerProperty = 
+                properties.FirstOrDefault(p => string.Equals(p.Name, "Header", StringComparison.InvariantCultureIgnoreCase));
 
-            var valueProperty = properties
-                                    .Where(p => string.Equals(p.Name, "Value", StringComparison.InvariantCultureIgnoreCase))
-                                    .FirstOrDefault();
+            var valueProperty = 
+                properties.FirstOrDefault(p => string.Equals(p.Name, "Value", StringComparison.InvariantCultureIgnoreCase));
 
             if (headerProperty == null || valueProperty == null)
             {
