@@ -21,7 +21,7 @@
         /// <param name="model">The model for the given media range.</param>
         /// <param name="context">The nancy context.</param>
         /// <returns>A <see cref="ProcessorMatch"/> result that determines the priority of the processor.</returns>
-        ProcessorMatch CanProcess(MediaRange requestedMediaRange, MediaRangeModelData mediaRangeModelData, NancyContext context);
+        ProcessorMatch CanProcess(MediaRange requestedMediaRange, MediaRangeModel mediaRangeModel, NancyContext context);
 
         /// <summary>
         /// Process the response.
@@ -30,6 +30,6 @@
         /// <param name="model">The model for the given media range.</param>
         /// <param name="context">The nancy context.</param>
         /// <returns>A <see cref="Response"/> instance.</returns>
-        Response Process(MediaRange requestedMediaRange, MediaRangeModelData mediaRangeModelData, NancyContext context);
+        Response Process(MediaRange requestedMediaRange, MediaRangeModel mediaRangeModel, NancyContext context);
     }
 }

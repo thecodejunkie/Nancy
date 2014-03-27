@@ -161,7 +161,7 @@
         public static Negotiator WithMediaRangeModel<TModel>(this Negotiator negotiator, MediaRange range, TModel model)
         {
             negotiator.WithAllowedMediaRange(range);
-            negotiator.NegotiationContext.MediaRangeModelMappings.Add(range, new MediaRangeModelData(typeof(TModel), () => model));
+            negotiator.NegotiationContext.MediaRangeModelMappings.Add(range, new MediaRangeModel(typeof(TModel), () => model));
 
             return negotiator;
         }
@@ -169,7 +169,7 @@
         public static Negotiator WithMediaRangeModel<TModel>(this Negotiator negotiator, MediaRange range, Func<TModel> modelFactory)
         {
             negotiator.WithAllowedMediaRange(range);
-            negotiator.NegotiationContext.MediaRangeModelMappings.Add(range, new MediaRangeModelData(typeof(TModel), modelFactory));
+            negotiator.NegotiationContext.MediaRangeModelMappings.Add(range, new MediaRangeModel(typeof(TModel), modelFactory));
 
             return negotiator;
         }
@@ -198,7 +198,7 @@
         //public static Negotiator WithMediaRangeModel(this Negotiator negotiator, MediaRange range, Func<object> modelFactory)
         //{
         //    negotiator.NegotiationContext.PermissableMediaRanges.Add(range);
-        //    negotiator.NegotiationContext.MediaRangeModelMappings.Add(range, new MediaRangeModelData(null, modelFactory));
+        //    negotiator.NegotiationContext.MediaRangeModelMappings.Add(range, new MediaRangeModel(null, modelFactory));
 
         //    return negotiator;
         //}

@@ -687,7 +687,7 @@ namespace Nancy.Tests.Functional.Tests
                 }
             }
 
-            public ProcessorMatch CanProcess(MediaRange requestedMediaRange, MediaRangeModelData mediaRangeModelData, NancyContext context)
+            public ProcessorMatch CanProcess(MediaRange requestedMediaRange, MediaRangeModel mediaRangeModel, NancyContext context)
             {
                 return new ProcessorMatch
                 {
@@ -696,9 +696,9 @@ namespace Nancy.Tests.Functional.Tests
                 };
             }
 
-            public Response Process(MediaRange requestedMediaRange, MediaRangeModelData mediaRangeModelData, NancyContext context)
+            public Response Process(MediaRange requestedMediaRange, MediaRangeModel mediaRangeModel, NancyContext context)
             {
-                return string.Format(ResponseTemplate, requestedMediaRange, mediaRangeModelData.Type == null ? "None" : mediaRangeModelData.Type.ToString());
+                return string.Format(ResponseTemplate, requestedMediaRange, mediaRangeModel.Type == null ? "None" : mediaRangeModel.Type.ToString());
             }
         }
 
@@ -712,7 +712,7 @@ namespace Nancy.Tests.Functional.Tests
                 }
             }
 
-            public ProcessorMatch CanProcess(MediaRange requestedMediaRange, MediaRangeModelData mediaRangeModelData, NancyContext context)
+            public ProcessorMatch CanProcess(MediaRange requestedMediaRange, MediaRangeModel mediaRangeModel, NancyContext context)
             {
                 return new ProcessorMatch
                 {
@@ -721,7 +721,7 @@ namespace Nancy.Tests.Functional.Tests
                 };
             }
 
-            public Response Process(MediaRange requestedMediaRange, MediaRangeModelData mediaRangeModelData, NancyContext context)
+            public Response Process(MediaRange requestedMediaRange, MediaRangeModel mediaRangeModel, NancyContext context)
             {
                 return null;
             }
@@ -737,7 +737,7 @@ namespace Nancy.Tests.Functional.Tests
                 }
             }
 
-            public ProcessorMatch CanProcess(MediaRange requestedMediaRange, MediaRangeModelData mediaRangeModelData, NancyContext context)
+            public ProcessorMatch CanProcess(MediaRange requestedMediaRange, MediaRangeModel mediaRangeModel, NancyContext context)
             {
                 return new ProcessorMatch
                 {
@@ -746,9 +746,9 @@ namespace Nancy.Tests.Functional.Tests
                 };
             }
 
-            public Response Process(MediaRange requestedMediaRange, MediaRangeModelData mediaRangeModelData, NancyContext context)
+            public Response Process(MediaRange requestedMediaRange, MediaRangeModel mediaRangeModel, NancyContext context)
             {
-                return (string) mediaRangeModelData.Factory.Invoke();
+                return (string) mediaRangeModel.Factory.Invoke();
             }
         }
 

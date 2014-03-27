@@ -40,7 +40,7 @@
         /// <param name="model">The model for the given media range.</param>
         /// <param name="context">The nancy context.</param>
         /// <returns>A <see cref="ProcessorMatch"/> result that determines the priority of the processor.</returns>
-        public ProcessorMatch CanProcess(MediaRange requestedMediaRange, MediaRangeModelData mediaRangeModelData, NancyContext context)
+        public ProcessorMatch CanProcess(MediaRange requestedMediaRange, MediaRangeModel mediaRangeModel, NancyContext context)
         {
             if (IsExactXmlContentType(requestedMediaRange))
             {
@@ -74,16 +74,16 @@
         /// <param name="model">The model for the given media range.</param>
         /// <param name="context">The nancy context.</param>
         /// <returns>A <see cref="Response"/> instance.</returns>
-        public Response Process(MediaRange requestedMediaRange, MediaRangeModelData mediaRangeModelData, NancyContext context)
+        public Response Process(MediaRange requestedMediaRange, MediaRangeModel mediaRangeModel, NancyContext context)
         {
-            return CreateResponse(mediaRangeModelData, serializer);
+            return CreateResponse(mediaRangeModel, serializer);
         }
 
-        private static Response CreateResponse(MediaRangeModelData mediaRangeModelData, ISerializer serializer)
+        private static Response CreateResponse(MediaRangeModel mediaRangeModel, ISerializer serializer)
         {
             return new Response
             {
-                Contents = stream => serializer.Serialize("application/xml", mediaRangeModelData.Factory.Invoke(), stream),
+                Contents = stream => serializer.Serialize("application/xml", mediaRangeModel.Factory.Invoke(), stream),
                 ContentType = "application/xml",
                 StatusCode = HttpStatusCode.OK
             };

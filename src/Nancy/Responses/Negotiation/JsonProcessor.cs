@@ -40,7 +40,7 @@
         /// <param name="model">The model for the given media range</param>
         /// <param name="context">The nancy context</param>
         /// <returns>A ProcessorMatch result that determines the priority of the processor</returns>
-        public ProcessorMatch CanProcess(MediaRange requestedMediaRange, MediaRangeModelData mediaRangeModelData, NancyContext context)
+        public ProcessorMatch CanProcess(MediaRange requestedMediaRange, MediaRangeModel mediaRangeModel, NancyContext context)
         {
             if (IsExactJsonContentType(requestedMediaRange))
             {
@@ -74,9 +74,9 @@
         /// <param name="model">The model for the given media range</param>
         /// <param name="context">The nancy context</param>
         /// <returns>A response</returns>
-        public Response Process(MediaRange requestedMediaRange, MediaRangeModelData mediaRangeModelData, NancyContext context)
+        public Response Process(MediaRange requestedMediaRange, MediaRangeModel mediaRangeModel, NancyContext context)
         {
-            return new JsonResponse(mediaRangeModelData.Factory.Invoke(), this.serializer);
+            return new JsonResponse(mediaRangeModel.Factory.Invoke(), this.serializer);
         }
 
         private static bool IsExactJsonContentType(MediaRange requestedContentType)
