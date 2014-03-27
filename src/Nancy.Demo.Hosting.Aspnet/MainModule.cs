@@ -23,7 +23,7 @@ namespace Nancy.Demo.Hosting.Aspnet
             Get["/negotiated"] = parameters => {
                 return Negotiate
                     .WithModel(new RatPack {FirstName = "Nancy "})
-                    .WithMediaRangeModel("text/html", new RatPack {FirstName = "Nancy fancy pants"})
+                    .WithMediaRangeModel<RatPack>("text/html", new RatPack { FirstName = "Nancy fancy pants" })
                     .WithView("negotiatedview")
                     .WithHeader("X-Custom", "SomeValue");
             };

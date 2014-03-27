@@ -403,7 +403,7 @@ namespace Nancy.Tests.Functional.Tests
                     {
                         config.WithModel("the model");
                         config.WithAllowedMediaRange("test/test");
-                        config.WithMediaRangeModel("test/test", "media model");
+                        config.WithMediaRangeModel<string>("test/test", "media model");
                     }));
                 }));
             });
@@ -687,7 +687,7 @@ namespace Nancy.Tests.Functional.Tests
                 }
             }
 
-            public ProcessorMatch CanProcess(MediaRange requestedMediaRange, dynamic model, NancyContext context)
+            public ProcessorMatch CanProcess(MediaRange requestedMediaRange, MediaRangeModelData mediaRangeModelData, NancyContext context)
             {
                 return new ProcessorMatch
                 {
@@ -696,9 +696,9 @@ namespace Nancy.Tests.Functional.Tests
                 };
             }
 
-            public Response Process(MediaRange requestedMediaRange, dynamic model, NancyContext context)
+            public Response Process(MediaRange requestedMediaRange, MediaRangeModelData mediaRangeModelData, NancyContext context)
             {
-                return string.Format(ResponseTemplate, requestedMediaRange, model == null ? "None" : model.GetType());
+                return string.Format(ResponseTemplate, requestedMediaRange, mediaRangeModelData.Type == null ? "None" : mediaRangeModelData.Type.ToString());
             }
         }
 
@@ -712,7 +712,7 @@ namespace Nancy.Tests.Functional.Tests
                 }
             }
 
-            public ProcessorMatch CanProcess(MediaRange requestedMediaRange, dynamic model, NancyContext context)
+            public ProcessorMatch CanProcess(MediaRange requestedMediaRange, MediaRangeModelData mediaRangeModelData, NancyContext context)
             {
                 return new ProcessorMatch
                 {
@@ -721,7 +721,7 @@ namespace Nancy.Tests.Functional.Tests
                 };
             }
 
-            public Response Process(MediaRange requestedMediaRange, dynamic model, NancyContext context)
+            public Response Process(MediaRange requestedMediaRange, MediaRangeModelData mediaRangeModelData, NancyContext context)
             {
                 return null;
             }
@@ -737,7 +737,7 @@ namespace Nancy.Tests.Functional.Tests
                 }
             }
 
-            public ProcessorMatch CanProcess(MediaRange requestedMediaRange, dynamic model, NancyContext context)
+            public ProcessorMatch CanProcess(MediaRange requestedMediaRange, MediaRangeModelData mediaRangeModelData, NancyContext context)
             {
                 return new ProcessorMatch
                 {
@@ -746,9 +746,9 @@ namespace Nancy.Tests.Functional.Tests
                 };
             }
 
-            public Response Process(MediaRange requestedMediaRange, dynamic model, NancyContext context)
+            public Response Process(MediaRange requestedMediaRange, MediaRangeModelData mediaRangeModelData, NancyContext context)
             {
-                return (string) model;
+                return (string) mediaRangeModelData.Factory.Invoke();
             }
         }
 
@@ -765,7 +765,7 @@ namespace Nancy.Tests.Functional.Tests
                 {
                     return Negotiate
                         .WithMediaRangeResponse("text/html", Response.AsRedirect("/"))
-                        .WithMediaRangeModel("application/json", new { Name = "Nancy" });
+                        .WithMediaRangeModel<object>("application/json", new { Name = "Nancy" });
                 };
             }
 

@@ -153,6 +153,19 @@
             return negotiator;
         }
 
+        public static Negotiator WithMediaRangeModel<TModel>(this Negotiator negotiator, MediaRange range, dynamic model)
+        {
+            return negotiator.WithMediaRangeModel<TModel>(range, () => model);
+        }
+
+        public static Negotiator WithMediaRangeModel<TModel>(this Negotiator negotiator, MediaRange range, Func<dynamic> modelFactory)
+        {
+            negotiator.NegotiationContext.PermissableMediaRanges.Add(range);
+            negotiator.NegotiationContext.MediaRangeModelMappings.Add(range, new MediaRangeModelData(typeof(TModel), modelFactory));
+
+            return negotiator;
+        }
+
         /// <summary>
         /// Sets the model to use for a particular media range.
         /// Will also add the MediaRange to the allowed list
@@ -161,10 +174,10 @@
         /// <param name="range">Range to match against</param>
         /// <param name="model">Model object</param>
         /// <returns>Updated negotiator object</returns>
-        public static Negotiator WithMediaRangeModel(this Negotiator negotiator, MediaRange range, object model)
-        {
-            return negotiator.WithMediaRangeModel(range, () => model);
-        }
+        //public static Negotiator WithMediaRangeModel(this Negotiator negotiator, MediaRange range, object model)
+        //{
+        //    return negotiator.WithMediaRangeModel(range, () => model);
+        //}
 
         /// <summary>
         /// Sets the model to use for a particular media range.
@@ -174,13 +187,13 @@
         /// <param name="range">Range to match against</param>
         /// <param name="modelFactory">Model factory for returning the model object</param>
         /// <returns>Updated negotiator object</returns>
-        public static Negotiator WithMediaRangeModel(this Negotiator negotiator, MediaRange range, Func<object> modelFactory)
-        {
-            negotiator.NegotiationContext.PermissableMediaRanges.Add(range);
-            negotiator.NegotiationContext.MediaRangeModelMappings.Add(range, modelFactory);
+        //public static Negotiator WithMediaRangeModel(this Negotiator negotiator, MediaRange range, Func<object> modelFactory)
+        //{
+        //    negotiator.NegotiationContext.PermissableMediaRanges.Add(range);
+        //    negotiator.NegotiationContext.MediaRangeModelMappings.Add(range, new MediaRangeModelData(null, modelFactory));
 
-            return negotiator;
-        }
+        //    return negotiator;
+        //}
 
         /// <summary>
         /// Sets the <see cref="Response"/> to use for a particular media range.
@@ -205,7 +218,7 @@
         /// <returns>Updated negotiator object</returns>
         public static Negotiator WithMediaRangeResponse(this Negotiator negotiator, MediaRange range, Func<Response> responseFactory)
         {
-            return negotiator.WithMediaRangeModel(range, responseFactory);
+            return negotiator.WithMediaRangeModel<Response>(range, responseFactory);
         }
 
         /// <summary>

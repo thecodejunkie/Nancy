@@ -28,11 +28,11 @@
         /// <param name="model">The model for the given media range.</param>
         /// <param name="context">The nancy context.</param>
         /// <returns>A <see cref="ProcessorMatch"/> result that determines the priority of the processor.</returns>
-        public ProcessorMatch CanProcess(MediaRange requestedMediaRange, dynamic model, NancyContext context)
+        public ProcessorMatch CanProcess(MediaRange requestedMediaRange, MediaRangeModelData mediaRangeModelData, NancyContext context)
         {
             return new ProcessorMatch
             {
-                ModelResult = (model is Response) ? MatchResult.ExactMatch : MatchResult.NoMatch,
+                ModelResult = (mediaRangeModelData.Type == typeof(Response)) ? MatchResult.ExactMatch : MatchResult.NoMatch,
                 RequestedContentTypeResult = MatchResult.DontCare
             };
         }
@@ -44,9 +44,9 @@
         /// <param name="model">The model for the given media range.</param>
         /// <param name="context">The nancy context.</param>
         /// <returns>A <see cref="Response"/> instance.</returns>
-        public Response Process(MediaRange requestedMediaRange, dynamic model, NancyContext context)
+        public Response Process(MediaRange requestedMediaRange, MediaRangeModelData mediaRangeModelData, NancyContext context)
         {
-            return (Response)model;
+            return (Response)mediaRangeModelData.Factory.Invoke();
         }
     }
 }

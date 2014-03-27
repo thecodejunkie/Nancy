@@ -113,10 +113,10 @@ namespace Nancy.Routing
         {
             foreach (var processor in this.processors)
             {
-                var result = (ProcessorMatch)processor.CanProcess(acceptHeader, model, context);
+                var result =
+                    processor.CanProcess(acceptHeader, model, context);
 
-                if (result.ModelResult != MatchResult.NoMatch
-                    && result.RequestedContentTypeResult != MatchResult.NoMatch)
+                if ((result.ModelResult != MatchResult.NoMatch) && (result.RequestedContentTypeResult != MatchResult.NoMatch))
                 {
                     yield return new Tuple<IResponseProcessor, ProcessorMatch>(processor, result);
                 }
@@ -132,7 +132,7 @@ namespace Nancy.Routing
 
         private static Response NegotiateResponse(
             IEnumerable<Tuple<string, IEnumerable<Tuple<IResponseProcessor, ProcessorMatch>>>> compatibleHeaders,
-            object model,
+            dynamic model,
             Negotiator negotiator,
             NancyContext context)
         {
@@ -150,7 +150,7 @@ namespace Nancy.Routing
 
                     var response = prioritizedProcessor.Item1.Process(
                         compatibleHeader.Item1,
-                        negotiator.NegotiationContext.GetModelForMediaRange(compatibleHeader.Item1),
+                        negotiator.NegotiationContext.GetModelDataForMediaRange(compatibleHeader.Item1),
                         context);
 
                     if (response != null)
@@ -328,7 +328,7 @@ namespace Nancy.Routing
                 var compatibleProcessors =
                     (IEnumerable<Tuple<IResponseProcessor, ProcessorMatch>>)
                     this.GetCompatibleProcessorsByHeader(
-                        header.Item1, negotiator.NegotiationContext.GetModelForMediaRange(header.Item1), context);
+                        header.Item1, negotiator.NegotiationContext.GetModelDataForMediaRange(header.Item1), context);
 
                 if (compatibleProcessors.Any())
                 {

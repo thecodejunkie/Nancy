@@ -17,7 +17,7 @@
         {
             this.Cookies = new List<INancyCookie>();
             this.PermissableMediaRanges = new List<MediaRange>(new[] { (MediaRange)"*/*" });
-            this.MediaRangeModelMappings = new Dictionary<MediaRange, Func<dynamic>>();
+            this.MediaRangeModelMappings = new Dictionary<MediaRange, MediaRangeModelData>();
             this.Headers = new Dictionary<string, string>();
         }
 
@@ -43,7 +43,7 @@
         /// Gets or sets the model mappings for media ranges.
         /// </summary>
         /// <value>An <see cref="IDictionary{TKey,TValue}"/> containing the media range model mappings.</value>
-        public IDictionary<MediaRange, Func<dynamic>> MediaRangeModelMappings { get; set; }
+        public IDictionary<MediaRange, MediaRangeModelData> MediaRangeModelMappings { get; set; }
 
         /// <summary>
         /// The name of the <see cref="INancyModule"/> that is locating a view.
@@ -91,8 +91,39 @@
             var matching = this.MediaRangeModelMappings.Any(m => mediaRange.Matches(m.Key));
 
             return matching ?
-                this.MediaRangeModelMappings.First(m => mediaRange.Matches(m.Key)).Value.Invoke() :
+                this.MediaRangeModelMappings.First(m => mediaRange.Matches(m.Key)).Value.Factory.Invoke() :
                 this.DefaultModel;
         }
+
+        public MediaRangeModelData GetModelDataForMediaRange(MediaRange mediaRange)
+        {
+            var matching = this.MediaRangeModelMappings.Any(m => mediaRange.Matches(m.Key));
+
+            return matching ?
+                this.MediaRangeModelMappings.First(m => mediaRange.Matches(m.Key)).Value :
+                this.DefaultModel != null ? new MediaRangeModelData(this.DefaultModel.GetType(), this.DefaultModel) : new MediaRangeModelData(null, () => null);
+        }
+    }
+
+    public class MediaRangeModelData
+    {
+        public MediaRangeModelData()
+        {
+        }
+
+        public MediaRangeModelData(Type type, dynamic model)
+            : this(type, () => model)
+        {
+        }
+
+        public MediaRangeModelData(Type type, Func<dynamic> factory)
+        {
+            this.Type = type;
+            this.Factory = factory;
+        }
+
+        public Func<dynamic> Factory { get; set; }
+
+        public Type Type { get; set; }
     }
 }
