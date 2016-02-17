@@ -8,7 +8,7 @@ namespace Nancy
     using System.Linq;
 
     using Nancy.Cookies;
-
+    using System.Reflection;
     /// <summary>
     /// Provides strongly-typed access to HTTP request headers.
     /// </summary>
@@ -390,9 +390,9 @@ namespace Nancy
             return values.Select(x => string.Concat(x.Item1, ";q=", x.Item2.ToString(CultureInfo.InvariantCulture)));
         }
 
-        private static bool IsGenericEnumerable(Type T)
+        private static bool IsGenericEnumerable(Type type)
         {
-            return !(T == typeof(string)) && T.IsGenericType && T.GetGenericTypeDefinition() == typeof(IEnumerable<>);
+            return !(type == typeof(string)) && type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>);
         }
 
         private static DateTime? ParseDateTime(string value)
