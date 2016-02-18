@@ -16,7 +16,7 @@
         /// </summary>
         /// <param name="source"></param>
         /// <returns> The assembly that contains the type </returns>
-        public static Assembly Assembly(this Type source)
+        public static Assembly GetAssembly(this Type source)
         {
             return source.GetTypeInfo().Assembly;
         }
