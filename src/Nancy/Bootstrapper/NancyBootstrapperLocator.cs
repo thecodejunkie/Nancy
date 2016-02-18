@@ -3,8 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Nancy.Extensions;
     using System.Reflection;
+    using Nancy.Extensions;
+
     /// <summary>
     /// Class for locating an INancyBootstrapper implementation.
     ///
