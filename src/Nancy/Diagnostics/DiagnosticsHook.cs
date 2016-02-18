@@ -4,6 +4,7 @@ namespace Nancy.Diagnostics
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Threading;
     using Nancy.Bootstrapper;
     using Nancy.Configuration;
@@ -18,7 +19,7 @@ namespace Nancy.Diagnostics
     using Nancy.Routing;
     using Nancy.Routing.Constraints;
     using Nancy.Routing.Trie;
-
+    
     /// <summary>
     /// Pipeline hook to handle diagnostics dashboard requests.
     /// </summary>
@@ -90,7 +91,7 @@ namespace Nancy.Diagnostics
                             }
 
                             return new EmbeddedFileResponse(
-                                typeof(DiagnosticsHook).Assembly,
+                                typeof(DiagnosticsHook).GetTypeInfo().Assembly,
                                 resourceNamespace,
                                 Path.GetFileName(ctx.Request.Url.Path));
                         }

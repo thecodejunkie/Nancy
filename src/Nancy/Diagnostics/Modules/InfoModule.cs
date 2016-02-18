@@ -31,7 +31,7 @@
 
 
                 data.Nancy = new ExpandoObject();
-                data.Nancy.Version = string.Format("v{0}", this.GetType().Assembly.GetName().Version.ToString());
+                data.Nancy.Version = string.Format("v{0}", this.GetType().GetTypeInfo().Assembly.GetName().Version.ToString());
                 data.Nancy.TracesDisabled = !environment.GetValue<TraceConfiguration>().DisplayErrorTraces;
                 data.Nancy.CaseSensitivity = StaticConfiguration.CaseSensitive ? "Sensitive" : "Insensitive";
                 data.Nancy.RootPath = rootPathProvider.GetRootPath();
