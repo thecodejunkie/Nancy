@@ -19,6 +19,7 @@
         "Diagnostics/Resources/**/*.*",
         "Diagnostics/Views/**/*.*"
     ],
+
     "frameworks": {
         "dotnet5.4": {
           "dependencies": {
