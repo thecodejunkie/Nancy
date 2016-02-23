@@ -108,7 +108,7 @@
                     {
                         var converter = TypeDescriptor.GetConverter(parseType);
 
-                        if (converter.IsValid(stringValue))
+                        if (converter.CanConvertFrom(typeof(string)))
                         {
                             return (T) converter.ConvertFromInvariantString(stringValue);
                         }
