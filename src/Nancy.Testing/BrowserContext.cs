@@ -206,7 +206,7 @@
 
             using (
                 var pkcs12 =
-                    Assembly.GetAssembly(typeof (BrowserContext))
+                    typeof (BrowserContext).GetTypeInfo().Assembly
                             .GetManifestResourceStream("Nancy.Testing.Resources.Nancy Testing Cert.pfx"))
             {
                 using (var br = new BinaryReader(pkcs12))
