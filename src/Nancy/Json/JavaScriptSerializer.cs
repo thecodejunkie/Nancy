@@ -283,7 +283,7 @@ namespace Nancy.Json
                 list = new ArrayList();
             else if (ReflectionUtils.IsInstantiatableType(type))
                 // non-generic typed list
-                list = (IList)Activator.CreateInstance(type, true);
+                list = (IList)Activator.CreateInstance(type);
             else if (ReflectionUtils.IsAssignable(type, typeofGenList))
             {
                 if (type.GetTypeInfo().IsGenericType)
@@ -355,7 +355,7 @@ namespace Nancy.Json
             else if (type.IsAssignableFrom(typeof(IDictionary)))
                 type = typeof(Dictionary<string, object>);
 
-            object target = Activator.CreateInstance(type, true);
+            object target = Activator.CreateInstance(type);
 
             foreach (KeyValuePair<string, object> entry in dict)
             {
