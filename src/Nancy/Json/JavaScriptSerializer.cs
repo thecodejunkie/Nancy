@@ -36,7 +36,7 @@ namespace Nancy.Json
     using System.Linq;
     using System.Reflection;
     using System.Text;
-
+    using Nancy.Extensions;
     using Nancy.Helpers;
 
     public class JavaScriptSerializer
@@ -283,7 +283,7 @@ namespace Nancy.Json
                 list = new ArrayList();
             else if (ReflectionUtils.IsInstantiatableType(type))
                 // non-generic typed list
-                list = (IList)Activator.CreateInstance(type);
+                list = type.CreateInstance<IList>(true);
             else if (ReflectionUtils.IsAssignable(type, typeofGenList))
             {
                 if (type.GetTypeInfo().IsGenericType)
@@ -297,7 +297,7 @@ namespace Nancy.Json
                     list = new ArrayList();
             }
             else
-                throw new InvalidOperationException(String.Format("Deserializing list type '{0}' not supported.", type.GetType().Name));
+                throw new InvalidOperationException(string.Format("Deserializing list type '{0}' not supported.", type.Name));
 
             if (list.IsReadOnly)
             {
@@ -355,7 +355,7 @@ namespace Nancy.Json
             else if (type.IsAssignableFrom(typeof(IDictionary)))
                 type = typeof(Dictionary<string, object>);
 
-            object target = Activator.CreateInstance(type);
+            object target = type.CreateInstance(true);
 
             foreach (KeyValuePair<string, object> entry in dict)
             {
