@@ -41,15 +41,15 @@ Get-ChildItem -Path . -Filter *.xproj -Recurse | ForEach-Object { Restore-Packag
 # Test for full framework
 Get-ChildItem -Path .\test -Filter *.xproj -Exclude Nancy.ViewEngines.Razor.Tests.Models.xproj -Recurse | ForEach-Object {
     Push-Location $_.DirectoryName
-    Test-Projects "dnx451"
+    Test-Projects "net451"
     Pop-Location
 }
 
 # Test for coreclr framework
-#Get-ChildItem -Path .\test -Filter *.xproj -Exclude Nancy.ViewEngines.Razor.Tests.Models.xproj -Recurse | ForEach-Object {
-#    Push-Location $_.DirectoryName
-#    Test-Projects ""
-#    Pop-Location
-#}
+Get-ChildItem -Path .\test -Filter *.xproj -Exclude Nancy.ViewEngines.Razor.Tests.Models.xproj -Recurse | ForEach-Object {
+    Push-Location $_.DirectoryName
+    Test-Projects "netcoreapp1.0"
+    Pop-Location
+}
 
 Pop-Location
