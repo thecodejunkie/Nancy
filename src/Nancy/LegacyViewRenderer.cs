@@ -1,13 +1,12 @@
 namespace Nancy
 {
     using System.IO;
-    using System.Threading.Tasks;
     using Nancy.Responses.Negotiation;
 
     /// <summary>
-    /// Helper class for rendering a view from a route handler.
+    /// Helper class for rendering a view from a route handler. Used by <see cref="LegacyNancyModule"/>.
     /// </summary>
-    public class ViewRenderer : IHideObjectMembers
+    public class LegacyViewRenderer : IHideObjectMembers
     {
         private readonly INancyModule module;
 
@@ -15,7 +14,7 @@ namespace Nancy
         /// Initializes a new instance of the <see cref="ViewRenderer"/> class.
         /// </summary>
         /// <param name="module">The <see cref="INancyModule"/> instance that is rendering the view.</param>
-        public ViewRenderer(INancyModule module)
+        public LegacyViewRenderer(INancyModule module)
         {
             this.module = module;
         }
@@ -26,7 +25,7 @@ namespace Nancy
         /// <param name="model">The model that should be passed into the view.</param>
         /// <returns>A delegate that can be invoked with the <see cref="Stream"/> that the view should be rendered to.</returns>
         /// <remarks>The view name is model.GetType().Name with any Model suffix removed.</remarks>
-        public Task<Negotiator> this[dynamic model]
+        public Negotiator this[dynamic model]
         {
             get { return this.GetNegotiator(null, model); }
         }
@@ -37,7 +36,7 @@ namespace Nancy
         /// <param name="viewName">The name of the view to render.</param>
         /// <returns>A delegate that can be invoked with the <see cref="Stream"/> that the view should be rendered to.</returns>
         /// <remarks>The extension in the view name is optional. If it is omitted, then Nancy will try to resolve which of the available engines that should be used to render the view.</remarks>
-        public Task<Negotiator> this[string viewName]
+        public Negotiator this[string viewName]
         {
             get { return this.GetNegotiator(viewName, null); }
         }
@@ -49,12 +48,12 @@ namespace Nancy
         /// <param name="model">The model that should be passed into the view.</param>
         /// <returns>A delegate that can be invoked with the <see cref="Stream"/> that the view should be rendered to.</returns>
         /// <remarks>The extension in the view name is optional. If it is omitted, then Nancy will try to resolve which of the available engines that should be used to render the view.</remarks>
-        public Task<Negotiator> this[string viewName, dynamic model]
+        public Negotiator this[string viewName, dynamic model]
         {
             get { return this.GetNegotiator(viewName, model); }
         }
 
-        private Task<Negotiator> GetNegotiator(string viewName, object model)
+        private Negotiator GetNegotiator(string viewName, object model)
         {
             var negotiationContext = this.module.Context.NegotiationContext;
 
@@ -63,7 +62,7 @@ namespace Nancy
             negotiationContext.PermissableMediaRanges.Clear();
             negotiationContext.PermissableMediaRanges.Add("text/html");
 
-            return Task.FromResult(new Negotiator(this.module.Context));
+            return new Negotiator(this.module.Context);
         }
     }
 }
